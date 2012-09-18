@@ -31,7 +31,9 @@
 
 views the Markdown documentation for any resource
 
-  - **description** : the resourceful resource to view documentation for
+- **resource** 
+
+  - **description** : the resource to view documentation for
 
   - **required** : true
 
@@ -40,4 +42,4 @@ views the Markdown documentation for any resource
 ### docs.start()
 
 
-### README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)
+*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*

@@ -12,8 +12,6 @@
 
   - [type](#creature-properties-type)
 
-  - [description](#creature-properties-description)
-
   - [life](#creature-properties-life)
 
 
@@ -41,19 +39,21 @@
 ## properties 
 
 
+- **type** 
+
   - **type** : string
 
   - **enum**
 
-      - 0 : *dragon*
+    - 0 : *dragon*
 
-      - 1 : *unicorn*
+    - 1 : *unicorn*
 
-      - 2 : *pony*
+    - 2 : *pony*
 
   - **default** : dragon
 
-  - **default** : this is a dragon resource
+- **life** 
 
   - **type** : number
 
@@ -70,27 +70,33 @@
 
 create a new foobar
 
+- **options** 
+
   - **type** : object
 
   - **properties**
 
-      - **type**
+    - **type** 
 
-          - type : *string*
+      - **type** : string
 
-          - enum : *["dragon", "unicorn", "pony"]*
+      - **enum**
 
-          - default : *dragon*
+        - 0 : *dragon*
 
-      - **description**
+        - 1 : *unicorn*
 
-          - default : *this is a dragon resource*
+        - 2 : *pony*
 
-      - **life**
+      - **default** : dragon
 
-          - type : *number*
+    - **life** 
 
-          - default : *10*
+      - **type** : number
+
+      - **default** : 10
+
+- **callback** 
 
   - **type** : function
 
@@ -100,9 +106,13 @@ create a new foobar
 
 Get object by id
 
+- **id** 
+
   - **type** : any
 
   - **description** : the id of the object
+
+- **callback** 
 
   - **type** : function
 
@@ -112,27 +122,33 @@ Get object by id
 
 find all instances of resource that matches query
 
+- **options** 
+
   - **type** : object
 
   - **properties**
 
-      - **type**
+    - **type** 
 
-          - type : *string*
+      - **type** : string
 
-          - enum : *["dragon", "unicorn", "pony"]*
+      - **enum**
 
-          - default : *dragon*
+        - 0 : *dragon*
 
-      - **description**
+        - 1 : *unicorn*
 
-          - default : *this is a dragon resource*
+        - 2 : *pony*
 
-      - **life**
+      - **default** : dragon
 
-          - type : *number*
+    - **life** 
 
-          - default : *10*
+      - **type** : number
+
+      - **default** : 10
+
+- **callback** 
 
   - **type** : function
 
@@ -142,27 +158,33 @@ find all instances of resource that matches query
 
 saves instance. if no id is provided, create called instead.
 
+- **options** 
+
   - **type** : object
 
   - **properties**
 
-      - **type**
+    - **type** 
 
-          - type : *string*
+      - **type** : string
 
-          - enum : *["dragon", "unicorn", "pony"]*
+      - **enum**
 
-          - default : *dragon*
+        - 0 : *dragon*
 
-      - **description**
+        - 1 : *unicorn*
 
-          - default : *this is a dragon resource*
+        - 2 : *pony*
 
-      - **life**
+      - **default** : dragon
 
-          - type : *number*
+    - **life** 
 
-          - default : *10*
+      - **type** : number
+
+      - **default** : 10
+
+- **callback** 
 
   - **type** : function
 
@@ -172,11 +194,15 @@ saves instance. if no id is provided, create called instead.
 
 destroys object by id
 
+- **id** 
+
   - **type** : any
 
   - **description** : the id of the object
 
   - **required** : true
+
+- **callback** 
 
   - **type** : function
 
@@ -190,9 +216,13 @@ destroys object by id
 
 fires a lazer at a certain power and direction
 
+- **options** 
+
   - **type** : object
 
   - **properties**
+
+    - **power** 
 
       - **type** : number
 
@@ -200,21 +230,25 @@ fires a lazer at a certain power and direction
 
       - **required** : true
 
+    - **direction** 
+
       - **type** : string
 
       - **enum**
 
-          - 0 : *up*
+        - 0 : *up*
 
-          - 1 : *down*
+        - 1 : *down*
 
-          - 2 : *left*
+        - 2 : *left*
 
-          - 3 : *right*
+        - 3 : *right*
 
       - **required** : true
 
       - **default** : up
+
+    - **callback** 
 
       - **type** : function
 
@@ -226,9 +260,11 @@ fires a lazer at a certain power and direction
 
 echos back a string
 
+- **text** 
+
   - **type** : string
 
   - **required** : true
 
 
-### README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)
+*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*

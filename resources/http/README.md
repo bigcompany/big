@@ -27,17 +27,23 @@
 ## properties 
 
 
+- **port** 
+
   - **type** : string
 
   - **default** : 8888
 
   - **description** : the port to listen on 
 
+- **host** 
+
   - **type** : string
 
   - **default** : 0.0.0.0
 
   - **description** : the host interface to listen on
+
+- **root** 
 
   - **type** : string
 
@@ -54,9 +60,13 @@
 
 starts an http server
 
+- **options** 
+
   - **type** : object
 
   - **properties**
+
+    - **port** 
 
       - **type** : string
 
@@ -64,15 +74,21 @@ starts an http server
 
       - **description** : the port to listen on 
 
+    - **host** 
+
       - **type** : string
 
       - **default** : 0.0.0.0
 
       - **description** : the host interface to listen on
 
+    - **root** 
+
       - **type** : string
 
       - **default** : /Users/maraksquires/dev/big/resources/http/public
+
+- **callback** 
 
   - **description** : the callback executed after server listen
 
@@ -81,4 +97,4 @@ starts an http server
   - **required** : false
 
 
-### README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)
+*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*

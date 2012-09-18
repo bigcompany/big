@@ -17,7 +17,7 @@ http.property("host", {
 
 http.property("root", {
   "type": "string",
-  "default": "./public"
+  "default": __dirname + "/public"
 });
 
 http.method('start', start, {
@@ -44,18 +44,18 @@ function start (options, callback) {
 
   var server;
 
-  var connect = require('connect');
+  var connect = require('connect'),
+      express = require('express');
 
-  var app = connect()
+  var app = express();
+
+  app
     .use(connect.favicon())
     .use(connect.logger('dev'))
-    /*
-    .use(connect.static(__dirname + '/public'))
-    .use(connect.directory(__dirname + '/public'))
-    */
+    .use(connect.static(options.root))
+    .use(connect.directory(options.root))
     .use(connect.cookieParser())
     .use(connect.session({ secret: 'my secret here' }))
-    .use(splash)
 
    http.server = server = require('http').createServer(app).listen(options.port, options.host, function(){
       callback(null, server);
@@ -64,17 +64,7 @@ function start (options, callback) {
 
 }
 
-
-function splash (req, res, next) {
-  //
-  // TODO: generate splash page with big instance information
-  //
-  //res.end(JSON.stringify(big, true, 2));
-  next();
-};
-
 exports.http = http;
-
 
 exports.dependencies = {
   "connect": "*"

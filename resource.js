@@ -171,6 +171,9 @@ function addMethod (r, name, method, schema, tap) {
     return method.apply(this, args);
   };
 
+  // store the schema on the fn for later reference
+  fn.schema = schema;
+
   r.methods[name] = fn;
   // TODO: add warning / check for override
   r[name] = fn;

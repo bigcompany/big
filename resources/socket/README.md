@@ -1,29 +1,39 @@
-# big-socket
+# socket
 
-
-# installation
-
-    npm install big-socket
 
 # usage
 
     var big = require("big");
     big.use("socket");
 
+## socket
 
-# methods
+#### [properties](#socket-properties)
 
-## `socket.start(callback)`
+
+#### [methods](#socket-methods)
+
+  - [start](#socket-methods-start) (callback)
+
+
+
+
+
+<a name="socket-methods"></a> 
+
+## methods 
+
+<a name="socket-methods-start"></a> 
+
+### socket.start(callback)
 
 starts a socket.io server
 
-### `callback`
+  - **description** : the callback executed after server listen
 
- - description : the callback executed after server listen
+  - **type** : function
 
- - type : function
-
- - required : false
+  - **required** : false
 
 
 ### README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)

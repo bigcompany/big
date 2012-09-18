@@ -1,79 +1,84 @@
-# big-http
+# http
 
-
-# installation
-
-    npm install big-http
 
 # usage
 
     var big = require("big");
     big.use("http");
 
-# http properties 
+## http
 
-## `http.port`
+#### [properties](#http-properties)
 
- - type : string
+  - [port](#http-properties-port)
 
- - default : 8888
+  - [host](#http-properties-host)
 
- - description : the port to listen on 
-
-## `http.host`
-
- - type : string
-
- - default : 0.0.0.0
-
- - description : the host interface to listen on
-
-## `http.root`
-
- - type : string
-
- - default : ./public
+  - [root](#http-properties-root)
 
 
-# methods
+#### [methods](#http-methods)
 
-## `http.start(options, callback)`
+  - [start](#http-methods-start) (options, callback)
+
+
+<a name="http-properties"></a>
+
+## properties 
+
+
+  - **type** : string
+
+  - **default** : 8888
+
+  - **description** : the port to listen on 
+
+  - **type** : string
+
+  - **default** : 0.0.0.0
+
+  - **description** : the host interface to listen on
+
+  - **type** : string
+
+  - **default** : /Users/maraksquires/dev/big/resources/http/public
+
+
+<a name="http-methods"></a> 
+
+## methods 
+
+<a name="http-methods-start"></a> 
+
+### http.start(options, callback)
 
 starts an http server
 
-### `options`
+  - **type** : object
 
- - type : object
+  - **properties**
 
-#### `port`
+      - **type** : string
 
-   - type : string
+      - **default** : 8888
 
-   - default : 8888
+      - **description** : the port to listen on 
 
-   - description : the port to listen on 
+      - **type** : string
 
-#### `host`
+      - **default** : 0.0.0.0
 
-   - type : string
+      - **description** : the host interface to listen on
 
-   - default : 0.0.0.0
+      - **type** : string
 
-   - description : the host interface to listen on
+      - **default** : /Users/maraksquires/dev/big/resources/http/public
 
-#### `root`
+  - **description** : the callback executed after server listen
 
-   - type : string
+  - **type** : function
 
-   - default : ./public
-
-### `callback`
-
- - description : the callback executed after server listen
-
- - type : function
-
- - required : false
+  - **required** : false
 
 
 ### README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)

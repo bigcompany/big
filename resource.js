@@ -13,6 +13,7 @@ resource.use = function (r, options) {
   if(typeof r === "string") {
     this[r] = resource.load(r)[r];
     this[r].name = r;
+    resource.resources[r] = this[r];
     //
     // Check for special methods to get hoisted onto big
     //
@@ -38,8 +39,6 @@ resource.use = function (r, options) {
     }
     return this[r];
   }
-  
-  
 };
 
 resource.load = function (r, callback) {
@@ -70,7 +69,7 @@ resource.load = function (r, callback) {
 // Will eventually be renamed and replace resource.define
 //
 resource.define = function (name, schema, data) {
-  
+
   var r = {};
 
   r.methods = {};
@@ -86,6 +85,13 @@ resource.define = function (name, schema, data) {
     addMethod(r, name, method, schema);
   };
 
+  r.database = function (type) {
+    //
+    // Extends the resource with CRUD methods ( can now persist to a database )
+    //
+    crud(r);
+  };
+
   //
   // Create a new object based on the schema
   //
@@ -97,34 +103,132 @@ resource.define = function (name, schema, data) {
   //
   // Return the new object
   //
-  
-  resource.resources[name] = schema;
+  resource.resources[name] = r
   return r;
   
 };
 
-resource.database = function (r, type) {
-  //
-  // Assigns a database persistance engine to the resource
-  //
-  crud(r);
-  
-};
-
+// creates an internal model for the resource
 function crud (r) {
-  r.create = function () {
-    // run validation before create
-  };
-  r.save = function () {
-    // run validation before save
-  };
-  r.get = function () {};
-  r.destroy = function () {};
+  var Schema = require('jugglingdb').Schema;
+  // create new JugglingDB object, based on database type
+
+  var schema = new Schema('memory');
+
+  // create new JugglingDB schema based on resource schema
+  // TODO: full schema mappings
+  var Model = schema.define('creature', {
+    blob: Object
+  });
+
+  // TODO: map all crud methods
+
+  //
+  // CREATE method
+  //
+  function create (data, callback){
+    Model.create(data, callback);
+  }
+  r.method('create', create, {
+    "description": "create a new foobar",
+    "properties": {
+      "options": {
+        "type": "object",
+        "properties": r.schema
+      },
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  //
+  // Get method
+  //
+  function get (id, callback){
+    Model.find(id, callback);
+  }
+  r.method('get', get, {
+    "description": "Get object by id",
+    "properties": {
+      "id": {
+        "type": "any",
+        "description": "the id of the object"
+      },
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  //
+  // Find method
+  //
+  function find (options, callback){
+    Model.all(options, callback);
+  }
+  r.method('find', find, {
+    "description": "Find all instances of resource, matched by query",
+    "properties": {
+      "options": {
+        "type": "object",
+        "properties": r.schema
+      },
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  //
+  // Save method
+  //
+  function save (options, callback){
+    Model.save(options, callback);
+  }
+  r.method('save', find, {
+    "description": "Save instance. When instance haven't id, create resource method called instead.",
+    "properties": {
+      "options": {
+        "type": "object",
+        "properties": r.schema
+      },
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  //
+  // Destroy method
+  //
+  function destroy (id, callback){
+    Model.destroy(options, callback);
+  }
+  r.method('destroy', find, {
+    "description": "destroys object by id",
+    "properties": {
+      "id": {
+        "type": "any",
+        "description": "the id of the object",
+        "required": true
+      },
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  // assign model to resource
+  r.model = Model;
 }
 
 
 function instantiate (schema, data) {
   var obj = {};
+  if(typeof schema.properties === 'undefined') {
+    return obj;
+  }
   Object.keys(schema.properties).forEach(function(prop){
     if (typeof schema.properties[prop].default !== 'undefined') {
       obj[prop] = schema.properties[prop].default;
@@ -183,6 +287,32 @@ function addProperty (r, name, schema) {
   r.schema.properties[name] = schema;
 }
 
+//
+// Creates a "safe" non-circular JSON object for easy stringification purposes
+//
+resource.toJSON = function (r) {
+  var obj = {};
+  var obj = {
+    name: r.name,
+    schema: r.schema,
+    methods: methods(r)
+  }
+  function methods (r) {
+    var obj = {};
+    for(var m in r.methods) {
+      obj[m] = r.methods[m].schema
+    }
+    return obj;
+  }
+  return obj;
+};
+
+resource.schema = {
+  properties: {}
+};
+
+resource.methods = [];
+resource.name = "resource";
 
 // TODO: add check for exports.dependencies requirements
 module['exports'] = resource;

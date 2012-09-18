@@ -134,7 +134,7 @@ function crud (r) {
     "properties": {
       "options": {
         "type": "object",
-        "properties": r.schema
+        "properties": r.schema.properties
       },
       "callback": {
         "type": "function"
@@ -168,11 +168,11 @@ function crud (r) {
     Model.all(options, callback);
   }
   r.method('find', find, {
-    "description": "Find all instances of resource, matched by query",
+    "description": "find all instances of resource that matches query",
     "properties": {
       "options": {
         "type": "object",
-        "properties": r.schema
+        "properties": r.schema.properties
       },
       "callback": {
         "type": "function"
@@ -187,11 +187,11 @@ function crud (r) {
     Model.save(options, callback);
   }
   r.method('save', find, {
-    "description": "Save instance. When instance haven't id, create resource method called instead.",
+    "description": "saves instance. if no id is provided, create called instead.",
     "properties": {
       "options": {
         "type": "object",
-        "properties": r.schema
+        "properties": r.schema.properties
       },
       "callback": {
         "type": "function"

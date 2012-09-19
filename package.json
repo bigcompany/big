@@ -5,5 +5,8 @@
   "main": "big.js",
   "repository": "https://github.com/bigcompany/big.git",
   "author": "Big Company",
+  "scripts": {
+    "start": "node ./bin/big"
+  },
   "license": "MIT"
 }

@@ -40,13 +40,13 @@ Big = new EventEmitter({
 //
 // Require a simple resource system
 //
-var resource = require('./resource');
-
+Big.resource = require('./resource');
 //
-// Use is a function for loading resource.
+// Use is a function for loading resources
 // Everytime a resource gets loaded, it will import its resource methods onto Big
 //
-Big.use = resource.use;
+Big.use    = Big.resource.use;
+Big.define = Big.resource.define;
 
 //
 // That's it for now! We will export Big into the module's export scope and be done with it!

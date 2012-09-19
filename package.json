@@ -1,0 +1,9 @@
+{
+  "name": "big",
+  "version": "0.0.0",
+  "description": "Big Company's Big Framework",
+  "main": "big.js",
+  "repository": "https://github.com/bigcompany/big.git",
+  "author": "Big Company",
+  "license": "MIT"
+}

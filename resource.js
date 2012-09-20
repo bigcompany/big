@@ -190,6 +190,22 @@ function crud (r, type) {
   });
 
   //
+  // All method
+  //
+  function all (callback){
+    Model.all({}, callback);
+  }
+
+  r.method('all', all, {
+    "description": "find all instances of resource",
+    "properties": {
+      "callback": {
+        "type": "function"
+      }
+    }
+  });
+
+  //
   // Save method
   //
   function save (options, callback){

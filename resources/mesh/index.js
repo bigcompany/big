@@ -22,6 +22,8 @@ function connect () {
 
   var client = require('engine.io-client');
 
+  big.use('system');
+
   mesh.client = new client.Socket({ host: 'localhost', port: 8000 });
 
   mesh.client.on('open', function () {
@@ -34,7 +36,7 @@ function connect () {
       var msg = JSON.parse(data);
       big.emit(msg.event, msg.payload, false)
     })
-    
+
     //
     // Any local events, should be re-broadcasted back to mesh,
     // unless reemit === false
@@ -49,8 +51,13 @@ function connect () {
       }
     });
 
-  });
+    //
+    // Send a friendly phone-home method
+    // Feel free to comment this line out at any time
+    //
+    big.emit('node::ohai', big.system.info());
 
+  });
 
 };
 
@@ -62,8 +69,16 @@ function listen (options) {
 
   mesh.server.on('connection', function (socket) {
 
+    big.emit('mesh::incoming::connection', socket.id);
+
     socket.on('message', function(data){
       var msg = JSON.parse(data);
+      msg.payload.id = socket.id;
+      //
+      // TODO: figure out where engine.io is storing remoteAddress on socket !!!
+      //
+      //msg.payload.host = socket.remoteAddress.host;
+      //msg.payload.port = socket.remoteAddress.port;
       big.emit(msg.event, msg.payload, false)
     });
 

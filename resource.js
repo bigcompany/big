@@ -7,36 +7,32 @@ var resource = {};
 resource.resources = {};
 
 resource.use = function (r, options) {
-  
+
   var self = this;
-  
+
   if(typeof r === "string") {
     this[r] = resource.load(r)[r];
     this[r].name = r;
+    //
+    // Any options passed into resource.use('foo', options),
+    // will be considered configuration options, and bound to resource.config
+    //
+    this[r].config = options || {};
+
+    //
+    // Attach a copy of the resource to the resource module scope for later reference
+    //
     resource.resources[r] = this[r];
+
+    hoistMethods(this[r], self);
+
     //
-    // Check for special methods to get hoisted onto big
+    // If a database configuration has been specified, attach CRUD methods to resource
     //
-    var hoist = ['start']; // TODO: un-hardcode configurable hoist methods
-    for (var m in this[r].methods) {
-      if (typeof this[r].methods[m] === 'function' && hoist.indexOf(m) !== -1) {
-        if(typeof self._start === "undefined") {
-          self._start = [];
-          self.start = function (options, callback) {
-            // TODO: async iterator
-            // TODO: un-hardcode options/callback signature
-            self._start.forEach(function(fn){
-              if(typeof options === "function") { // no options sent, just callback
-                callback = options;
-                options = {};
-              }
-              fn(options, callback);
-            });
-          };
-        }
-        self._start.push(this[r].methods[m]);
-      }
+    if (typeof this[r].config.database !== 'undefined') {
+      this[r].database();
     }
+
     return this[r];
   }
 };
@@ -72,10 +68,12 @@ resource.define = function (name, schema, data) {
 
   var r = {};
 
+  r.name = name;
   r.methods = {};
   r.schema = {
     properties: {}
   };
+  r.config = {};
 
   r.property = function (name, schema) {
     addProperty(r, name, schema);
@@ -99,34 +97,41 @@ resource.define = function (name, schema, data) {
   //
   // If any additional data has been passed in, assign it to the resource
   //
-  
+
   //
   // Return the new object
   //
   resource.resources[name] = r
   return r;
-  
+
 };
 
 // creates an internal model for the resource
-function crud (r) {
-  var Schema = require('jugglingdb').Schema;
-  // create new JugglingDB object, based on database type
+function crud (r, type) {
 
-  var schema = new Schema('memory');
+  var Schema = require('jugglingdb').Schema;
+
+  // create new JugglingDB object, based on database type
+  var schema = new Schema(type || 'cradle', { database: "big" }); // TODO: better configuration of database type
 
   // create new JugglingDB schema based on resource schema
-  // TODO: full schema mappings
-  var Model = schema.define('creature', {
-    blob: Object
+  var _schema = {};
+
+  // TODO: better / full schema mappings
+  Object.keys(r.schema.properties).forEach(function(p){
+    var prop = resource.schema.properties[p];
+    _schema[p] = { type: String }; // TODO: not everything is a string
   });
 
+  var Model = schema.define(r.name, _schema);
+
   // TODO: map all crud methods
+  // TODO: map all before / after hook methods
 
   //
   // CREATE method
   //
-  function create (data, callback){
+  function create (data, callback) {
     Model.create(data, callback);
   }
   r.method('create', create, {
@@ -241,16 +246,16 @@ function instantiate (schema, data) {
 }
 
 function addMethod (r, name, method, schema, tap) {
-  
+
   //
   // This is a method defined by the Resource
   //
-  
+
   //
   // The method is bound onto the "methods" property of the resource
   //
   var fn = function () {
-    
+
     var args =  Array.prototype.slice.call(arguments);
     var payload = [];
     //
@@ -261,12 +266,20 @@ function addMethod (r, name, method, schema, tap) {
       //
       // There is a schema, so we must validate the method signature against it
       //
-      
+
       //
       // First, we'll create a new instance of the object based on the current schema and data
       //
       var obj = instantiate(schema, args[0]);
+
+      //
+      // Mixin default schema options supplied function argument data
+      //
+      for(var p in args[0]) {
+        obj.options[p] = args[0][p];
+      }
       args[0] = obj.options;
+
     }
 
     //
@@ -286,6 +299,40 @@ function addMethod (r, name, method, schema, tap) {
 function addProperty (r, name, schema) {
   r.schema.properties[name] = schema;
 }
+
+//
+// Aggregates and hoists any "special" defined methods, such as "start", "listen", "connect", etc...
+//
+function hoistMethods (r, self) {
+  //
+  // Check for special methods to get hoisted onto big
+  //
+  var hoist = ['start', 'connect', 'listen']; // TODO: un-hardcode configurable hoist methods
+  for (var m in r.methods) {
+    if (typeof r.methods[m] === 'function' && hoist.indexOf(m) !== -1) {
+
+      function queue (m) {
+        if(typeof self['_' + m] === "undefined") {
+          self['_' + m] = [];
+          self[m] = function (options, callback) {
+            // TODO: async iterator
+            // TODO: un-hardcode options/callback signature
+            self['_' + m].forEach(function(fn){
+              if(typeof options === "function") { // no options sent, just callback
+                callback = options;
+                options = {};
+              }
+              fn(options, callback);
+            });
+          };
+        }
+        self['_' + m].push(self[r].methods[m]);
+      }
+      queue(m);
+    }
+  }
+}
+
 
 //
 // Creates a "safe" non-circular JSON object for easy stringification purposes
@@ -313,6 +360,7 @@ resource.schema = {
 
 resource.methods = [];
 resource.name = "resource";
+
 
 // TODO: add check for exports.dependencies requirements
 module['exports'] = resource;

@@ -1,0 +1,52 @@
+var big = require('../big');
+
+big.use('node', { database: 'cradle' });
+big.use('mesh');
+big.use('http');
+
+big.node.create({ 
+  id: 'root',
+  lastSeen: new Date()
+});
+
+big.onAny(function(){ 
+  big.node.get('root', function(err, node){
+    big.node.create({ 
+      id: 'root',
+      events: node.events + 1,
+      lastSeen: new Date()
+    });
+  })
+});
+
+big.on('mesh::incoming::connection', function(id){
+  big.node.create({ id: id, lastSeen: new Date() }, function(err, node){});
+});
+
+big.on('node::ohai', function(data){
+  data.lastSeen = new Date();
+  big.node.create(data, function(err, node){});
+});
+
+
+big.listen();
+big.start(function(err, server){
+  console.log('started on ', server.address());
+});
+
+
+big.http.app.get('/info', function(req, res){
+  console.log(big.mesh.server)
+  big.node.all(function(err, nodes){
+    res.end(JSON.stringify({ 
+      nodes: nodes.length,
+      connections: big.mesh.server.clientsCount
+    }, true, 2));
+  })
+});
+
+big.http.app.get('/nodes', function(req, res){
+  big.node.all(function(err, nodes){
+    res.end(JSON.stringify(nodes, true, 2));
+  })
+});

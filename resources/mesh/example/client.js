@@ -5,6 +5,10 @@ big.use('mesh');
 big.connect();
 big.start();
 
-big.on('hello', function(data){
-  console.log(data);
+setInterval(function(){
+  big.emit('client-foo', { bar: "foo" });
+}, 2000);
+
+big.onAny(function(data){
+  console.log(this.event, data)
 });

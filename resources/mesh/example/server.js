@@ -5,6 +5,12 @@ big.use('mesh');
 big.listen();
 big.start();
 
+big.emit('server');
+
 setInterval(function(){
-  big.emit('hello', { foo: "bar" });
-}, 500);
+  big.emit('server-foo', { bar: "foo" });
+}, 2000);
+
+big.onAny(function(data){
+  console.log(this.event, data)
+})

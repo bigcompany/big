@@ -326,7 +326,7 @@ function hoistMethods (r, self) {
             });
           };
         }
-        self['_' + m].push(self[r].methods[m]);
+        self['_' + m].push(r.methods[m]);
       }
       queue(m);
     }

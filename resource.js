@@ -11,7 +11,11 @@ resource.use = function (r, options) {
   var self = this;
 
   if(typeof r === "string") {
-    this[r] = resource.load(r)[r];
+    var _r = resource.load(r);
+    if(typeof _r[r] === 'undefined') {
+      throw new Error("exports." + r + " is not defined in the " + r + ' resource!')
+    }
+    this[r] = _r[r];
     this[r].name = r;
     //
     // Any options passed into resource.use('foo', options),
@@ -275,10 +279,12 @@ function addMethod (r, name, method, schema, tap) {
       //
       // Mixin default schema options supplied function argument data
       //
-      for(var p in args[0]) {
-        obj.options[p] = args[0][p];
+      if(typeof args[0] === "object") {
+        for(var p in args[0]) {
+          obj.options[p] = args[0][p];
+        }
+        args[0] = obj.options;
       }
-      args[0] = obj.options;
 
     }
 

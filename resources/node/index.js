@@ -10,7 +10,7 @@ node.property('port', {
 });
 
 node.property('events', {
-  "description": "the total amount of events processed by this node"
+  "description": "the total amount of events processed by this node",
   "type": "number"
 });
 

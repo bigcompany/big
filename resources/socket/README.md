@@ -38,4 +38,4 @@ starts a socket.io server
   - **required** : false
 
 
-*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*
+*README auto-generated with [big-docs](https://github.com/bigcompany/big/tree/master/resources/docs)*

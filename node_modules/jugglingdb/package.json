@@ -1,0 +1,78 @@
+{
+  "name": "jugglingdb",
+  "description": "ORM for every database: redis, mysql, neo4j, mongodb, postgres, sqlite",
+  "version": "0.1.18",
+  "author": {
+    "name": "Anatoliy Chakkaev",
+    "email": "rpm1602@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Anatoliy Chakkaev",
+      "email": "rpm1602@gmail.com"
+    },
+    {
+      "name": "Julien Guimont",
+      "email": "julien.guimont@gmail.com"
+    },
+    {
+      "name": "Joseph Junker",
+      "email": "joseph.jnk@gmail.com"
+    },
+    {
+      "name": "Henri Bergius",
+      "email": "henri.bergius@iki.fi"
+    },
+    {
+      "name": "redvulps",
+      "email": "fabopereira@gmail.com"
+    },
+    {
+      "name": "Felipe Sateler",
+      "email": "fsateler@gmail.com"
+    },
+    {
+      "name": "Amir M. Mahmoudi",
+      "email": "a@geeknux.com"
+    },
+    {
+      "name": "Justinas Stankevičius",
+      "email": "justinas@justinas.me"
+    },
+    {
+      "name": "Rick O'Toole",
+      "email": "patrick.n.otoole@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1602/jugglingdb"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "nodeunit test/*_test*"
+  },
+  "engines": [
+    "node >= 0.4.12"
+  ],
+  "dependencies": {
+    "node-uuid": ">= 1.3.3"
+  },
+  "devDependencies": {
+    "semicov": "*",
+    "coffee-script": ">= 1.2.0",
+    "nodeunit": ">= 0.6.4",
+    "redis": ">= 0.6.7",
+    "mongoose": "latest",
+    "mysql": ">= 0.9.4",
+    "pg": "= 0.7.2",
+    "sqlite3": ">= 2.0.18",
+    "riak-js": ">= 0.4.1",
+    "neo4j": ">= 0.2.5",
+    "mongodb": ">= 0.9.9",
+    "felix-couchdb": ">= 1.0.3"
+  },
+  "readme": "## About [<img src=\"https://secure.travis-ci.org/1602/jugglingdb.png\" />](http://travis-ci.org/#!/1602/jugglingdb)\n\nJugglingDB is cross-db ORM, providing **common interface** to access most popular database formats. \nCurrently supported are: mysql, mongodb, redis, neo4j and js-memory-storage (yep, \nself-written engine for test-usage only). You can add your favorite database adapter, checkout one of the \nexisting adapters to learn how, it's super-easy, I guarantee.\n\n## Installation\n\n    npm install jugglingdb\n\n## Participation\n\nCheck status of project on trello board: https://trello.com/board/jugglingdb/4f0a0b1e27d3103c64288388\nFeel free to vote and comment on cards (tickets/issues), if you want to join team -- send me a message with your email.\n\n## Usage\n\n```javascript\nvar Schema = require('./jugglingdb').Schema;\nvar schema = new Schema('redis', {port: 6379}); //port number depends on your configuration\n// define models\nvar Post = schema.define('Post', {\n    title:     { type: String, length: 255 },\n    content:   { type: Schema.Text },\n    date:      { type: Date,    default: Date.now },\n    published: { type: Boolean, default: false }\n});\n// simplier way to describe model\nvar User = schema.define('User', {\n    name:         String,\n    bio:          Schema.Text,\n    approved:     Boolean,\n    joinedAt:     Date,\n    age:          Number\n});\n\n// setup relationships\nUser.hasMany(Post,   {as: 'posts',  foreignKey: 'userId'});\n// creates instance methods:\n// user.posts(conds)\n// user.posts.build(data) // like new Post({userId: user.id});\n// user.posts.create(data) // build and save\n\nPost.belongsTo(User, {as: 'author', foreignKey: 'userId'});\n// creates instance methods:\n// post.author(callback) -- getter when called with function\n// post.author() -- sync getter when called without params\n// post.author(user) -- setter when called with object\n\nschema.automigrate(); // required only for mysql NOTE: it will drop User and Post tables\n\n// work with models:\nvar user = new User;\nuser.save(function (err) {\n    var post = user.posts.build({title: 'Hello world'});\n    post.save(console.log);\n});\n\n// or just call it as function (with the same result):\nvar user = User();\nuser.save(...);\n\n// Common API methods\n\n// just instantiate model\nnew Post\n// save model (of course async)\nPost.create(cb);\n// all posts\nPost.all(cb)\n// all posts by user\nPost.all({where: {userId: user.id}, order: 'id', limit: 10, skip: 20});\n// the same as prev\nuser.posts(cb)\n// same as new Post({userId: user.id});\nuser.posts.build\n// save as Post.create({userId: user.id}, cb);\nuser.posts.create(cb)\n// find instance by id\nUser.find(1, cb)\n// count instances\nUser.count([conditions, ]cb)\n// destroy instance\nuser.destroy(cb);\n// destroy all instances\nUser.destroyAll(cb);\n\n// Setup validations\nUser.validatesPresenceOf('name', 'email')\nUser.validatesLengthOf('password', {min: 5, message: {min: 'Password is too short'}});\nUser.validatesInclusionOf('gender', {in: ['male', 'female']});\nUser.validatesExclusionOf('domain', {in: ['www', 'billing', 'admin']});\nUser.validatesNumericalityOf('age', {int: true});\nUser.validatesUniquenessOf('email', {message: 'email is not unique'});\n\nuser.isValid(function (valid) {\n    if (!valid) {\n        user.errors // hash of errors {attr: [errmessage, errmessage, ...], attr: ...}    \n    }\n})\n\n```\n\n## Callbacks\n\nThe following callbacks supported:\n\n    - afterInitialize\n    - beforeCreate\n    - afterCreate\n    - beforeSave\n    - afterSave\n    - beforeUpdate\n    - afterUpdate\n    - beforeDestroy\n    - afterDestroy\n    - beforeValidation\n    - afterValidation\n\nEach callback is class method of the model, it should accept single argument: `next`, this is callback which\nshould be called after end of the hook. Except `afterInitialize` because this method is syncronous (called after `new Model`).\n\n## Object lifecycle:\n\n```javascript\nvar user = new User;\n// afterInitialize\nuser.save(callback);\n// beforeValidation\n// afterValidation\n// beforeSave\n// beforeCreate\n// afterCreate\n// afterSave\n// callback\nuser.updateAttribute('email', 'email@example.com', callback);\n// beforeValidation\n// afterValidation\n// beforeUpdate\n// afterUpdate\n// callback\nuser.destroy(callback);\n// beforeDestroy\n// afterDestroy\n// callback\nUser.create(data, callback);\n// beforeValidate\n// afterValidate\n// beforeCreate\n// afterCreate\n// callback\n```\n\nRead the tests for usage examples: ./test/common_test.js\nValidations: ./test/validations_test.js\n\n## Your own database adapter\n\nTo use custom adapter, pass it's package name as first argument to `Schema` constructor:\n\n    mySchema = new Schema('couch-db-adapter', {host:.., port:...});\n\nMake sure, your adapter can be required (just put it into ./node_modules):\n\n    require('couch-db-adapter');\n\n## Running tests\n\nAll tests are written using nodeunit:\n\n    nodeunit test/common_test.js\n\nIf you run this line, of course it will fall, because it requres different databases to be up and running, \nbut you can use js-memory-engine out of box! Specify ONLY env var:\n\n    ONLY=memory nodeunit test/common_test.js\n\nof course, if you have redis running, you can run\n\n    ONLY=redis nodeunit test/common_test.js\n\n## Package structure\n\nNow all common logic described in `./lib/*.js`, and database-specific stuff in `./lib/adapters/*.js`. It's super-tiny, right?\n\n## Contributing\n\nIf you have found a bug please write unit test, and make sure all other tests still pass before pushing code to repo.\n\n## Roadmap\n\n### Common:\n\n+ transparent interface to APIs\n+ -before and -after hooks on save, update, destroy\n+ scopes\n+ default values\n+ more relationships stuff\n+ docs\n\n### Databases:\n\n+ riak\n+ couchdb\n+ low-level mysql\n+ postgres\n+ sqlite\n\n## License\n\nMIT\n",
+  "_id": "jugglingdb@0.1.18",
+  "_from": "jugglingdb"
+}

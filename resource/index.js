@@ -8,7 +8,12 @@
 var resource = {};
 
 //
-// On the resource, create a "resources" object that will store a referece to every defined resource
+// Require a simple JSON-Schema validator
+//
+var validator = require('./validator');
+
+//
+// On the resource, create a "resources" object that will store a reference to every defined resource
 //
 resource.resources = {};
 
@@ -197,6 +202,7 @@ function crud (r, type) {
 
   // TODO: map all JugglingDB crud methods
   // TODO: create before / after hook methods
+  // TOOD: map resource methods back onto returned JugglingDB models scoped with primary key ( for convience )
 
   //
   // Attach the CRUD methods to the resource
@@ -321,7 +327,7 @@ function crud (r, type) {
 //
 // Creates a new instance of a schema based on default data
 //
-function instantiate (schema, data) {
+var instantiate = resource.instantiate = function (schema, data) {
   var obj = {};
   if(typeof schema.properties === 'undefined') {
     return obj;
@@ -347,40 +353,69 @@ function addMethod (r, name, method, schema, tap) {
   //
   var fn = function () {
 
-    var args =  Array.prototype.slice.call(arguments);
-    var payload = [];
+    var args  = Array.prototype.slice.call(arguments),
+        _args = [];
+
+    var payload = [],
+        callback = args[args.length -1];
 
     //
     // Inside this method, we must take into account any schema,
-    // which has been defined with the method signature
+    // which has been defined with the method signature and validate against it
     //
     if (typeof schema === 'object') {
 
       //
-      // There is a schema, so we must validate the method signature against it
+      // First, create a new schema instance of the object based on the current schema and data
       //
+      var defaults = resource.instantiate(schema, args[0]);
 
       //
-      // First, we'll create a new instance of the object based on the current schema and data
+      // Perform a schema validation
       //
-      var obj = instantiate(schema, args[0]);
+      var validate = validator.validate(defaults, schema);
 
       //
-      // Mixin default schema options supplied function argument data
+      // If the schema check fails, do not fire the wrapped method.
       //
-      if(typeof args[0] === "object") {
-        for(var p in args[0]) {
-          obj.options[p] = args[0][p];
+      if (!validate.valid) {
+        if (typeof callback === 'function') {
+          //
+          // If a valid callback was provided, continue with the error
+          //
+          return callback(validate.errors);
+        } else {
+          //
+          // If there is no valid callback, throw an error ( for now )
+          //
+          throw new Error(validate.error);
         }
-        args[0] = obj.options;
       }
 
+      //
+      // Mixin default schema data with supplied function arguments
+      //
+      Object.keys(defaults).forEach(function(item){
+        _args.push(defaults[item]);
+      });
+
+      //
+      // Check to see if the last supplied argument was a function.
+      // If so, it is assumed the method signature follows the node.js,
+      // convention of the last argument being a callback
+      //
+      if(typeof callback === 'function') {
+        _args.push(callback);
+      }
+
+    } else {
+      _args = args;
     }
 
     //
-    // Everything seems okay, let's excecute the method with passed in arguments
+    // Everything seems okay, excecute the method with passed in arguments
     //
-    return method.apply(this, args);
+    return method.apply(this, _args);
   };
 
   // store the schema on the fn for later reference

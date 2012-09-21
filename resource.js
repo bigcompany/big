@@ -1,46 +1,77 @@
 //
-// resource.js - Resource module for Big
+// resource.js - resource module for node.js
 //
 
+//
+// Create a resource singleton
+//
 var resource = {};
 
+//
+// On the resource, create a "resources" object that will store a referece to every defined resource
+//
 resource.resources = {};
 
+//
+// Use a resource by string name
+//
 resource.use = function (r, options) {
 
   var self = this;
 
-  if(typeof r === "string") {
-    var _r = resource.load(r);
-    if(typeof _r[r] === 'undefined') {
-      throw new Error("exports." + r + " is not defined in the " + r + ' resource!')
-    }
-    this[r] = _r[r];
-    this[r].name = r;
-    //
-    // Any options passed into resource.use('foo', options),
-    // will be considered configuration options, and bound to resource.config
-    //
-    this[r].config = options || {};
+  //
+  // Load the resource as a node.js module
+  //
+  var _r = resource.load(r);
 
-    //
-    // Attach a copy of the resource to the resource module scope for later reference
-    //
-    resource.resources[r] = this[r];
-
-    hoistMethods(this[r], self);
-
-    //
-    // If a database configuration has been specified, attach CRUD methods to resource
-    //
-    if (typeof this[r].config.database !== 'undefined') {
-      this[r].database();
-    }
-
-    return this[r];
+  //
+  // If the required resource doesn't have the expected exported scope,
+  // throw a friendly error message
+  //
+  if(typeof _r[r] === 'undefined') {
+    throw new Error("exports." + r + " is not defined in the " + r + ' resource!')
   }
+
+  //
+  // TODO: do we need this?
+  //
+      this[r] = _r[r];
+      this[r].name = r;
+
+      //
+      // hoist up any resource methods which are considered special,
+      // ex: "start", "listen", "connect"
+      //
+      hoistMethods(this[r], self);
+
+  //
+  // Any options passed into resource.use('foo', options),
+  // will be considered configuration options, and bound to resource.config
+  //
+  this[r].config = options || {};
+
+  //
+  // Attach a copy of the resource to the resource module scope for later reference
+  //
+  resource.resources[r] = this[r];
+
+  //
+  // If a database configuration has been specified, attach CRUD methods to resource
+  //
+  if (typeof this[r].config.datasource !== 'undefined') {
+    //
+    // Extends the resource with CRUD methods ( can now persist to a database )
+    //
+    crud(this[r], this[r].config.datasource);
+  }
+
+  return this[r];
+
 };
 
+//
+// Load a resource module by string name
+//
 resource.load = function (r, callback) {
   //
   // TODO: clean up nested try / catch
@@ -70,8 +101,14 @@ resource.load = function (r, callback) {
 //
 resource.define = function (name, schema, data) {
 
+  //
+  // Create an empty resource object
+  //
   var r = {};
 
+  //
+  // Initalize the resource with default values
+  //
   r.name = name;
   r.methods = {};
   r.schema = {
@@ -79,58 +116,90 @@ resource.define = function (name, schema, data) {
   };
   r.config = {};
 
+  //
+  // Give the resource a property() method for defining properties
+  //
   r.property = function (name, schema) {
     addProperty(r, name, schema);
   };
 
+  //
+  // Give the resource a method() method for defining methods
+  //
   r.method = function (name, method, schema) {
     addMethod(r, name, method, schema);
   };
 
-  r.database = function (type) {
-    //
-    // Extends the resource with CRUD methods ( can now persist to a database )
-    //
-    crud(r);
-  };
-
   //
-  // Create a new object based on the schema
+  // TODO: Create a new object based on the schema
   //
   
   //
-  // If any additional data has been passed in, assign it to the resource
+  // TODO: If any additional data has been passed in, assign it to the resource
   //
 
   //
-  // Return the new object
+  // Attach a copy of the resource to the resources scope ( for later reference )
   //
   resource.resources[name] = r
+
+  //
+  // Return the new resource
+  //
   return r;
 
 };
 
-// creates an internal model for the resource
+//
+// Provider API mapping for JugglingDB to datasource API for convenience
+//
+var mappings = {
+  "couch": "cradle"
+};
+
+//
+// Extends a resource with CRUD methods.
+// This reates model to back resource, and allows the resource to be instantiable
+//
 function crud (r, type) {
 
+  //
+  // Require JugglingDB.Schema
+  //
   var Schema = require('jugglingdb').Schema;
 
-  // create new JugglingDB object, based on database type
-  var schema = new Schema(type || 'cradle', { database: "big" }); // TODO: better configuration of database type
+  //
+  // Create new JugglingDB schema, based on incoming datasource type
+  //
+  var schema = new Schema(mappings[type] || type || 'fs', { database: "big" }); // TODO: better configuration of database type
 
-  // create new JugglingDB schema based on resource schema
+  //
+  // Create empty schema object for mapping between resource and JugglingDB
+  //
   var _schema = {};
 
-  // TODO: better / full schema mappings
+  //
+  // For every property in the resource schema, map the property to JugglingDB
+  //
   Object.keys(r.schema.properties).forEach(function(p){
     var prop = resource.schema.properties[p];
+    //
+    // TODO: Better type detection
+    //
     _schema[p] = { type: String }; // TODO: not everything is a string
   });
 
+  //
+  // Create a new JugglingDB schema based on temp schema
+  //
   var Model = schema.define(r.name, _schema);
 
-  // TODO: map all crud methods
-  // TODO: map all before / after hook methods
+  // TODO: map all JugglingDB crud methods
+  // TODO: create before / after hook methods
+
+  //
+  // Attach the CRUD methods to the resource
+  //
 
   //
   // CREATE method
@@ -139,7 +208,7 @@ function crud (r, type) {
     Model.create(data, callback);
   }
   r.method('create', create, {
-    "description": "create a new foobar",
+    "description": "create a new " + r.name,
     "properties": {
       "options": {
         "type": "object",
@@ -158,7 +227,7 @@ function crud (r, type) {
     Model.find(id, callback);
   }
   r.method('get', get, {
-    "description": "Get object by id",
+    "description": "get " + r.name +  " by id",
     "properties": {
       "id": {
         "type": "any",
@@ -177,7 +246,7 @@ function crud (r, type) {
     Model.all(options, callback);
   }
   r.method('find', find, {
-    "description": "find all instances of resource that matches query",
+    "description": "find all instances of " + r.name +  " that matches query",
     "properties": {
       "options": {
         "type": "object",
@@ -197,7 +266,7 @@ function crud (r, type) {
   }
 
   r.method('all', all, {
-    "description": "find all instances of resource",
+    "description": "find all instances of " + r.name,
     "properties": {
       "callback": {
         "type": "function"
@@ -211,8 +280,8 @@ function crud (r, type) {
   function save (options, callback){
     Model.save(options, callback);
   }
-  r.method('save', find, {
-    "description": "saves instance. if no id is provided, create called instead.",
+  r.method('save', save, {
+    "description": "saves " + r.name + " instance. if no id is provided, create is called instead.",
     "properties": {
       "options": {
         "type": "object",
@@ -231,7 +300,7 @@ function crud (r, type) {
     Model.destroy(options, callback);
   }
   r.method('destroy', find, {
-    "description": "destroys object by id",
+    "description": "destroys a " + r.name + " by id",
     "properties": {
       "id": {
         "type": "any",
@@ -248,7 +317,9 @@ function crud (r, type) {
   r.model = Model;
 }
 
-
+//
+// Creates a new instance of a schema based on default data
+//
 function instantiate (schema, data) {
   var obj = {};
   if(typeof schema.properties === 'undefined') {
@@ -265,24 +336,25 @@ function instantiate (schema, data) {
   return obj;
 }
 
+//
+// Attachs a method onto a resources as a named function with optional schema and tap
+//
 function addMethod (r, name, method, schema, tap) {
 
   //
-  // This is a method defined by the Resource
-  //
-
-  //
-  // The method is bound onto the "methods" property of the resource
+  // Create a new method that will act as a wrap for the passed in "method"
   //
   var fn = function () {
 
     var args =  Array.prototype.slice.call(arguments);
     var payload = [];
+
     //
     // Inside this method, we must take into account any schema,
     // which has been defined with the method signature
     //
     if (typeof schema === 'object') {
+
       //
       // There is a schema, so we must validate the method signature against it
       //
@@ -313,7 +385,14 @@ function addMethod (r, name, method, schema, tap) {
   // store the schema on the fn for later reference
   fn.schema = schema;
 
+  //
+  // The method is bound onto the "methods" property of the resource
+  //
   r.methods[name] = fn;
+
+  //
+  // The method is also bound directly onto the resource
+  //
   // TODO: add warning / check for override
   r[name] = fn;
 }

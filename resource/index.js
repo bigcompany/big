@@ -56,12 +56,13 @@ resource.use = function (r, options) {
   resource.resources[r] = this[r];
 
   //
-  // If a database configuration has been specified, attach CRUD methods to resource
+  // If a database configuration has been specified, attach CRUD methods to resource.
+  // This adds methods such as Resource.create / Resource.get.
+  // With a datasource specification, resources can persist.
+  // Persisting resources requires an additional dependency of "jugglingdb"
+  // see: github.com/1602/jugglingdb
   //
   if (typeof this[r].config.datasource !== 'undefined') {
-    //
-    // Extends the resource with CRUD methods ( can now persist to a database )
-    //
     crud(this[r], this[r].config.datasource);
   }
 
@@ -81,7 +82,7 @@ resource.load = function (r, callback) {
     //
     // First, attempt to load resource as absolute path name
     //
-    result = require(__dirname + '/resources/' + r);
+    result = require(__dirname + '/../resources/' + r);
   } catch (err) {
     throw err;
     try {

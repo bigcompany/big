@@ -1,0 +1,9 @@
+{
+  "name": "resource",
+  "version": "0.0.0",
+  "description": "node.js resource",
+    "main": "index.js",
+  "repository": "https://github.com/bigcompany/resource.git",
+  "author": "Marak",
+  "license": "MIT"
+}

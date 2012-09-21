@@ -1,0 +1,10 @@
+{
+  "name": "couchdb",
+  "type": null,
+  "port": 5984,
+  "host": "localhost",
+  "uri": "",
+  "username": null,
+  "password": null,
+  "id": "couchdb"
+}

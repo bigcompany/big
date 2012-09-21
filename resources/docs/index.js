@@ -224,7 +224,7 @@ function tableOfContents (resource) {
 
 function generateFooter() {
   var str = '';
-  str += ('*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*');
+  str += ('*README auto-generated with [big-docs](https://github.com/bigcompany/big/tree/master/resources/docs)*');
   return str;
 }
 

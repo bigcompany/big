@@ -1,12 +1,19 @@
-var big = require('big'),
-    datasource = big.define('datasource');
-
+var resource = require('resource'),
+    datasource = resource.define('datasource');
 
 datasource.property('name', {
   type: "string",
   description: "The name of the new datasource",
   minLength: 1,
   default: "the-datasource"
+});
+
+datasource.property('status', {
+  type: "string",
+  description: "the status of the datasource",
+  enum: ['inactive', 'active', 'error'],
+  format: 'status',
+  default: "inactive"
 });
 
 datasource.property('type', {

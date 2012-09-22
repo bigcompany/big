@@ -1,7 +1,5 @@
-var socket = exports;
-
-var big  = require('big'),
-    socket = big.define('socket');
+var resource  = require('resource'),
+    socket = resource.define('socket');
 
 socket.method('start', start, {
   "description": "starts a socket.io server",

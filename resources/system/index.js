@@ -1,5 +1,5 @@
-var big = require('big'),
-    system = big.define('system');
+var resource = require('resource'),
+    system = resource.define('system');
 
 system.method('info', info);
 

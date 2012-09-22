@@ -1,8 +1,8 @@
 //
 // The big mesh allows big to communicate with other big instances
 //
-var big  = require('big'),
-    mesh = big.define('mesh');
+var resource = require('resource'),
+    mesh = resource.define('mesh');
 
 mesh.method('start', start);
 mesh.method('connect', connect, {
@@ -22,7 +22,7 @@ function connect () {
 
   var client = require('engine.io-client');
 
-  big.use('system');
+  resource.use('system');
 
   mesh.client = new client.Socket({ host: 'localhost', port: 8000 });
 

@@ -1,5 +1,5 @@
-var big  = require('big'),
-    node = big.define('node');
+var resource  = require('resource'),
+    node = resource.define('node');
 
 node.property('host', {
   "type": "string"

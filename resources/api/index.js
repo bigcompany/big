@@ -1,5 +1,5 @@
-var big = require('big'),
-    api = big.define('api');
+var resource = require('resource'),
+    api = resource.define('api');
 
 api.property('version', {
   "description": "the semantic version of the API",
@@ -10,7 +10,7 @@ api.property('version', {
 api.property('resources', {
   "description": "the resources represented by the api",
   "type": "object",
-  "default": big.resource.resources.creature
+  "default": resource.resources.creature
 });
 
 api.method('start', start, {
@@ -25,27 +25,20 @@ api.method('start', start, {
 
 function start (options, callback) {
 
-  var connect = require('connect');
-  var auth = connect.basicAuth('admin', 'admin');
-
-  big.http.app.get('/api', function (req, res, next) {
+  resource.http.app.get('/api', function (req, res, next) {
     res.end('welcome to the api explorer');
   });
 
-  big.http.app.get('/api/' + options.version, function (req, res, next) {
+  resource.http.app.get('/api/' + options.version, function (req, res, next) {
     res.end(JSON.stringify(api, true, 2));
   });
 
-  big.http.app.get('/api/' + options.version + '/:resource', function (req, res, next) {
-    var r = big.resource.resources[req.param('resource')];
-    var obj = big.resource.toJSON(r);
+  resource.http.app.get('/api/' + options.version + '/:resource', function (req, res, next) {
+    var r = resource.resources[req.param('resource')];
+    var obj = resource.toJSON(r);
     res.end(JSON.stringify(obj, true, 2));
   });
 
 }
-
-exports.dependencies = {
-  "connect": "*"
-};
 
 exports.api = api;

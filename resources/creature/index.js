@@ -1,9 +1,8 @@
-var big = require('big'),
-    creature = big.define('creature');
+var resource = require('resource'),
+    creature = resource.define('creature');
 
 creature.property('type', { type: "string", enum: ['dragon', 'unicorn', 'pony'], default: "dragon"});
-creature.property('description', { default: '' });
-creature.property('life', { default: 10 });
+creature.property('life', { type: "number", default: 10 });
 
 function poke(callback) {
   if (callback) {

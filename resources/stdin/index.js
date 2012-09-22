@@ -1,5 +1,5 @@
-var big   = require('big'),
-    stdin = big.define('stdin');
+var resource   = require('resource'),
+    stdin = resource.define('stdin');
 
 stdin.method('start', start, {
   "description": "listens for STDIN on the process and attempts to eval it as JavaScript"

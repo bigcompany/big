@@ -1,10 +1,10 @@
-var big  = require('big'),
-    http = big.define('http');
+var resource  = require('resource'),
+    http = resource.define('http');
 
 http.name = "http";
 
 http.property("port", {
-  "type": "string",
+  "type": "number",
   "default": 8888,
   "description": "the port to listen on "
 });

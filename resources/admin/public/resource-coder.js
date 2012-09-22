@@ -8,7 +8,7 @@ exports.code = function (resource) {
   //
   // var Creature = resource.define('creature');
   //
-  str += 'var ' + resource.name + " = big.define('" + resource.name +  "');\n\n";
+  str += 'var ' + resource.name + " = resource.define('" + resource.name +  "');\n\n";
 
   var schema = resource.schema.properties;
   Object.keys(schema).forEach(function(p){
@@ -57,7 +57,7 @@ exports.code = function (resource) {
   });
   
   //
-  // For every remote method on the resource
+  // For every method on the resource
   //
   for (var m in resource.methods) {
     if(typeof resource.methods[m] === "function") {

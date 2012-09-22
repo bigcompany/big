@@ -1,0 +1,3 @@
+var big = require('big');
+big.use('docs');
+big.docs.build();

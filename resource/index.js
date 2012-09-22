@@ -425,26 +425,50 @@ function addMethod (r, name, method, schema, tap) {
     //
     if (typeof schema === 'object') {
 
-      //
-      // First, create a new schema instance of the object based on the current schema and data
-      //
-      var defaults = {}, _data = {};
+      var _instance = {},
+          _data = {};
 
+      //
+      //  Merge in arguments data based on supplied schema
+      //
+      //
+      //  If the the schema has a "properties" property, assume the convention of,
+      //  schema property order to function arguments array order
+      //
+      // Ex:
+      //
+      //    The following schema:
+      //
+      //       { properties : { "options" : { "type": "object" }, "callback" : { "type": "function" } } }
+      //
+      //    Maps to the following method signature:
+      //
+      //       function(options, callback)
+      //
+      //    With this association:
+      //
+      //       properties.options  = arguments['0']
+      //       properties.callback = arguments['1']
+      //
+      //
       if (typeof schema.properties === "object") {
         Object.keys(schema.properties).forEach(function(prop,i){
           _data[prop] = args[i]
         });
       }
 
-      defaults = resource.instantiate(schema, _data);
+      //
+      // Create a new schema instance with default values, mixed in with supplied arguments data
+      //
+      _instance = resource.instantiate(schema, _data);
 
       //
-      // Perform a schema validation
+      // Perform a schema validation on the new instance to ensure validity
       //
-      var validate = validator.validate(defaults, schema);
+      var validate = validator.validate(_instance, schema);
 
       //
-      // If the schema check fails, do not fire the wrapped method.
+      // If the schema validation fails, do not fire the wrapped method
       //
       if (!validate.valid) {
         if (typeof callback === 'function') {
@@ -456,21 +480,26 @@ function addMethod (r, name, method, schema, tap) {
           //
           // If there is no valid callback, throw an error ( for now )
           //
-          throw new Error(validate.errors);
+          console.log(validate.errors)
+          throw new Error(JSON.stringify(validate.errors));
         }
       }
 
       //
-      // Mixin default schema data with supplied function arguments
+      // The schema validation passed, prepare method for execution
       //
-      Object.keys(defaults).forEach(function(item){
-        _args.push(defaults[item]);
+
+      //
+      // Convert schema data back into arguments array
+      //
+      Object.keys(_instance).forEach(function(item){
+        _args.push(_instance[item]);
       });
 
       //
       // Check to see if the last supplied argument was a function.
       // If so, it is assumed the method signature follows the node.js,
-      // convention of the last argument being a callback
+      // convention of the last argument being a callback andd will be added to the end of the array
       //
       if(typeof callback === 'function') {
         _args.push(callback);
@@ -481,7 +510,7 @@ function addMethod (r, name, method, schema, tap) {
     }
 
     //
-    // Everything seems okay, excecute the method with passed in arguments
+    // Everything seems okay, excecute the method with the modified arguments
     //
     return method.apply(this, _args);
   };

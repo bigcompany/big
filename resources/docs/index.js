@@ -1,12 +1,10 @@
 var resource = require('resource'),
-    docs = resource.define('docs');
-
-var fs = require('fs');
-
-var viewful = require('viewful');
+    docs = resource.define('docs'),
+    fs = require('fs'),
+    viewful = require('viewful');
 
 docs.method('generate', generate, {
-  "description": "generates Markdown documentation from a esource",
+  "description": "generates markdown documentation from a resource",
   "properties": {
     "resource": {
       "description": "the resource to generate documentation for"
@@ -27,7 +25,7 @@ docs.method('view', view, {
   "properties": {
     "resource": {
       "description": "the resource to view documentation for",
-      // "type": "function", function type doesn't work in revalidator?
+      "type": "function",
       "required": true
     }
   }
@@ -72,12 +70,6 @@ function generate (resource, template) {
 function view (resource) {
   var md = fs.readFileSync(__dirname + '/../' + resource + '/README.md').toString();
 };
-
-
-//
-// Remark: resourcePropeties and resourceMethods functions both need to be refactored,
-// to recurisively parse properties into markdown. right now its hard-coded to 2 levels
-//
 
 function resourceProperties (resource) {
   var str = '';
@@ -227,12 +219,6 @@ function generateFooter() {
   return str;
 }
 
-/*
-docs.method('start', start, {
-  "description": "add a /docs route to the http server for viewing documentation"
-});
-*/
-
 function build () {
   var _resources = {};
   var dirs = fs.readdirSync(__dirname + '/../');
@@ -286,9 +272,13 @@ function build () {
 }
 
 
+/*
+docs.method('start', start, {
+  "description": "add a /docs route to the http server for viewing documentation"
+});
+
 function start (options, callback) {
 
-  /*
   big.http.app.get('/docs', function (req, res, next) {
     res.end('TODO: docs root');
   });
@@ -315,14 +305,11 @@ function start (options, callback) {
     str = '<link href="/style.css" rel="stylesheet"/> \n' + view.render();
     res.end(str);
   });
-  */
-
 }
+*/
 
 exports.docs = docs;
 
 exports.dependencies = {
   "viewful": "*"
 };
-
-

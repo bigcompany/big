@@ -10,6 +10,8 @@
 
 #### [properties](#http-properties)
 
+  - [id](#http-properties-id)
+
   - [port](#http-properties-port)
 
   - [host](#http-properties-host)
@@ -27,9 +29,13 @@
 ## properties 
 
 
+- **id** 
+
+  - **type** : any
+
 - **port** 
 
-  - **type** : string
+  - **type** : number
 
   - **default** : 8888
 
@@ -68,7 +74,7 @@ starts an http server
 
     - **port** 
 
-      - **type** : string
+      - **type** : number
 
       - **default** : 8888
 
@@ -97,4 +103,4 @@ starts an http server
   - **required** : false
 
 
-*README auto-generated with [big-docs](https://github.com/bigcompany/big/resources/tree/master/docs)*
+*README auto-generated with [big-docs](https://github.com/bigcompany/big/tree/master/resources/docs)*

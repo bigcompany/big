@@ -10,6 +10,8 @@
 
 #### [properties](#creature-properties)
 
+  - [id](#creature-properties-id)
+
   - [type](#creature-properties-type)
 
   - [life](#creature-properties-life)
@@ -28,6 +30,10 @@
 
 ## properties 
 
+
+- **id** 
+
+  - **type** : any
 
 - **type** 
 

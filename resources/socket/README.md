@@ -10,6 +10,8 @@
 
 #### [properties](#socket-properties)
 
+  - [id](#socket-properties-id)
+
 
 #### [methods](#socket-methods)
 
@@ -17,6 +19,10 @@
 
 
 
+
+- **id** 
+
+  - **type** : any
 
 
 <a name="socket-methods"></a> 

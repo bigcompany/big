@@ -10,6 +10,8 @@
 
 #### [properties](#api-properties)
 
+  - [id](#api-properties-id)
+
   - [version](#api-properties-version)
 
   - [resources](#api-properties-resources)
@@ -24,6 +26,10 @@
 
 ## properties 
 
+
+- **id** 
+
+  - **type** : any
 
 - **version** 
 
@@ -57,6 +63,10 @@ when the api resource starts
   - **type** : object
 
   - **properties**
+
+    - **id** 
+
+      - **type** : any
 
     - **version** 
 

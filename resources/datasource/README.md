@@ -10,7 +10,11 @@
 
 #### [properties](#datasource-properties)
 
+  - [id](#datasource-properties-id)
+
   - [name](#datasource-properties-name)
+
+  - [status](#datasource-properties-status)
 
   - [type](#datasource-properties-type)
 
@@ -33,6 +37,10 @@
 ## properties 
 
 
+- **id** 
+
+  - **type** : any
+
 - **name** 
 
   - **type** : string
@@ -42,6 +50,24 @@
   - **minLength** : 1
 
   - **default** : the-datasource
+
+- **status** 
+
+  - **type** : string
+
+  - **description** : the status of the datasource
+
+  - **enum**
+
+    - 0 : *inactive*
+
+    - 1 : *active*
+
+    - 2 : *error*
+
+  - **format** : status
+
+  - **default** : inactive
 
 - **type** 
 

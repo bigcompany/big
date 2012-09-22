@@ -118,7 +118,11 @@ resource.define = function (name, schema, data) {
   r.name = name;
   r.methods = {};
   r.schema = {
-    properties: {}
+    properties: {
+      "id": {
+        "type": "any"
+      }
+    }
   };
   r.config = {};
 
@@ -160,14 +164,53 @@ resource.define = function (name, schema, data) {
 // Provider API mapping for JugglingDB to datasource API for convenience
 //
 var mappings = {
-  "couch": "cradle"
+  "couch": "cradle",
+  "couchdb": "cradle"
 };
+
+
+//
+// Creates a new instance of a schema based on default data as arguments array
+//
+var instantiate = resource.instantiate = function (schema, levelData) {
+  var obj = {};
+
+  levelData = levelData || {};
+
+  if(typeof schema.properties === 'undefined') {
+    return obj;
+  }
+
+  Object.keys(schema.properties).forEach(function(prop, i){
+
+    if (typeof schema.properties[prop].default !== 'undefined') {
+      obj[prop] = schema.properties[prop].default;
+    }
+
+    if (typeof levelData[prop] !== 'undefined') {
+      obj[prop] = levelData[prop];
+    }
+
+    if (typeof schema.properties[prop].properties === 'object') {
+      obj[prop] = instantiate(schema.properties[prop], levelData[prop]);
+    }
+
+  });
+
+  return obj;
+}
 
 //
 // Extends a resource with CRUD methods.
 // This reates model to back resource, and allows the resource to be instantiable
 //
-function crud (r, type) {
+function crud (r, options) {
+
+  if(typeof options === "string") {
+    options = {
+      type: options
+    };
+  }
 
   //
   // Require JugglingDB.Schema
@@ -177,7 +220,15 @@ function crud (r, type) {
   //
   // Create new JugglingDB schema, based on incoming datasource type
   //
-  var schema = new Schema(mappings[type] || type || 'fs', { database: "big" }); // TODO: better configuration of database type
+  var _type = mappings[options.type] || options.type || 'fs';
+  var schema = new Schema(_type, {
+    database: "big",
+    host: options.host,
+    port: options.port,
+    username: options.username,
+    password: options.password,
+    https: true // TODO: check that HTTPS actually does something
+  });
 
   //
   // Create empty schema object for mapping between resource and JugglingDB
@@ -238,7 +289,8 @@ function crud (r, type) {
     "properties": {
       "id": {
         "type": "any",
-        "description": "the id of the object"
+        "description": "the id of the object",
+        "required": true
       },
       "callback": {
         "type": "function"
@@ -324,24 +376,6 @@ function crud (r, type) {
   r.model = Model;
 }
 
-//
-// Creates a new instance of a schema based on default data
-//
-var instantiate = resource.instantiate = function (schema, data) {
-  var obj = {};
-  if(typeof schema.properties === 'undefined') {
-    return obj;
-  }
-  Object.keys(schema.properties).forEach(function(prop){
-    if (typeof schema.properties[prop].default !== 'undefined') {
-      obj[prop] = schema.properties[prop].default;
-    }
-    if (typeof schema.properties[prop].properties === 'object') {
-      obj[prop] = instantiate(schema.properties[prop]);
-    }
-  });
-  return obj;
-}
 
 //
 // Attachs a method onto a resources as a named function with optional schema and tap
@@ -368,7 +402,15 @@ function addMethod (r, name, method, schema, tap) {
       //
       // First, create a new schema instance of the object based on the current schema and data
       //
-      var defaults = resource.instantiate(schema, args[0]);
+      var defaults = {}, _data = {};
+
+      if (typeof schema.properties === "object") {
+        Object.keys(schema.properties).forEach(function(prop,i){
+          _data[prop] = args[i]
+        });
+      }
+
+      defaults = resource.instantiate(schema, _data);
 
       //
       // Perform a schema validation
@@ -388,7 +430,7 @@ function addMethod (r, name, method, schema, tap) {
           //
           // If there is no valid callback, throw an error ( for now )
           //
-          throw new Error(validate.error);
+          throw new Error(validate.errors);
         }
       }
 

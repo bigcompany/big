@@ -38,16 +38,41 @@ resource.use = function (r, options) {
   }
 
   //
-  // TODO: do we need this?
+  // Also, attach a copy of the resource to "this" scope ( which may or may not be the resource module scope )
   //
-      this[r] = _r[r];
-      this[r].name = r;
+  this[r] = _r[r];
+  this[r].name = r;
+
+  //
+  // If exports.hoist has been set to "true",
+  // then all exported resource methods will be attached "above" their resource[name] scope
+  //
+  // In most cases, you should not use hoist.
+  // "eventemitter", is a special case for using exports.hoist = true
+  //
+  if (_r.hoist === true) {
+    for(var p in _r[r]) {
 
       //
-      // hoist up any resource methods which are considered special,
-      // ex: "start", "listen", "connect"
+      // Hoist methods onto resource module scope
       //
-      hoistMethods(this[r], self);
+      resource[p] = _r[r][p];
+
+      //
+      // Also hoist methods onto "this" scope ( which may or may not be the resource module scope )
+      //
+      this[p] = _r[r][p];
+
+    }
+  }
+
+  //
+  // Certain method names are considered "special" and will automatically be,
+  // hoisted and aggregated into common event handlers ( regardless of exports.hoist )
+  //
+  // ex: "start", "listen", "connect"
+  //
+  hoistMethods(this[r], self);
 
   //
   // Any options passed into resource.use('foo', options),
@@ -58,6 +83,7 @@ resource.use = function (r, options) {
   //
   // Attach a copy of the resource to the resource module scope for later reference
   //
+  resource[r] = _r[r];
   resource.resources[r] = this[r];
 
   //

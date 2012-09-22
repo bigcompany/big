@@ -14,20 +14,6 @@ var Big = {};
 //
 
 //
-// Require an EventEmitter package
-//
-var EventEmitter = require('eventemitter2').EventEmitter2;
-
-//
-// We'll just overwrite Big to be an EventEmitter. That's easy enough.
-//
-Big = new EventEmitter({
-  wildcard: true, // event emitter should use wildcards ( * )
-  delimiter: '::', // the delimiter used to segment namespaces
-  maxListeners: 20, // the max number of listeners that can be assigned to an event
-});
-
-//
 // That's all Big is.
 // Big seems quite small right now actually.
 // We will need to create a way for Big to load additional functionality...
@@ -45,7 +31,7 @@ Big.resource = require('./resource');
 // Use is a function for loading resources
 // Everytime a resource gets loaded, it will import its resource methods onto Big
 //
-Big.use    = Big.resource.use;
+Big.use = Big.resource.use;
 Big.define = Big.resource.define;
 
 //

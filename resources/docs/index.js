@@ -1,12 +1,12 @@
-var big = require('big');
-var docs = big.define('docs');
+var resource = require('resource'),
+    docs = resource.define('docs');
+
 var fs = require('fs');
 
 var viewful = require('viewful');
 
-/* TODO: fix curry
 docs.method('generate', generate, {
-  "description": "generates Markdown documentation from a Resourceful Resource",
+  "description": "generates Markdown documentation from a esource",
   "properties": {
     "resource": {
       "description": "the resource to generate documentation for"
@@ -17,7 +17,10 @@ docs.method('generate', generate, {
     }
   }
 });
-*/
+
+docs.method('build', build, {
+  "description": "generates Markdown documentation for all resources"
+});
 
 docs.method('view', view, {
   "description": "views the Markdown documentation for any resource",
@@ -38,16 +41,9 @@ docs.all = function (resources) {
   return str;
 };
 
-docs.generate = function generate (resource, template) {
+function generate (resource, template) {
 
   template = template || fs.readFileSync(__dirname + '/template.md').toString();
-
-  //
-  // TODO: this should be caught by method validations
-  //
-  if(typeof resource === 'undefined') {
-    return 'no resource found!';
-  }
 
   var view = new viewful.View({
     template: template, 
@@ -66,8 +62,11 @@ docs.generate = function generate (resource, template) {
     methods: resourceMethods(resource),
     footer: generateFooter()
   };
+
   var s = view.render(data);
+
   return s;
+
 };
 
 function view (resource) {
@@ -228,12 +227,68 @@ function generateFooter() {
   return str;
 }
 
+/*
 docs.method('start', start, {
   "description": "add a /docs route to the http server for viewing documentation"
 });
+*/
+
+function build () {
+  var _resources = {};
+  var dirs = fs.readdirSync(__dirname + '/../');
+  //
+  // Generate a README file for every resource
+  //
+  dirs.forEach(function(p){
+    var stat;
+    try {
+      stat = fs.statSync(__dirname + '/../' + p + '/' + "index" + '.js');
+    } catch(err) {
+      //console.log(err)
+    }
+    if(stat) {
+      _resources[p] = {};
+      var str = p.substr(0, 1);
+      str = str.toUpperCase();
+      var P = str + p.substr(1, p.length - 1);
+      console.log(('attempting to require ' + '../' + p).yellow)
+
+      var _resource = resource.use(p);
+
+      //
+      // Generate the docs
+      //
+      var doc = resource.docs.generate(_resource, fs.readFileSync(__dirname + '/template.md').toString());
+      //
+      // Write them to disk
+      //
+      var _path = __dirname + '/../' + p + '/README.md';
+
+      try {
+        fs.writeFileSync(_path, doc);
+        console.log(('wrote to ' + _path).green)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+  });
+
+  //
+  // Then generate a README file for the core project
+  //
+  var str = '# resources \n\n';
+  str += 'big resources for any occasion \n\n'
+  Object.keys(_resources).forEach(function(r){
+    str += ' - [' + r + '](https://github.com/bigcompany/resources/tree/master/' + r +')\n';
+  });
+  fs.writeFileSync('./README.md', str);
+  console.log('wrote to core README.md file'.green);
+}
+
 
 function start (options, callback) {
 
+  /*
   big.http.app.get('/docs', function (req, res, next) {
     res.end('TODO: docs root');
   });
@@ -260,6 +315,7 @@ function start (options, callback) {
     str = '<link href="/style.css" rel="stylesheet"/> \n' + view.render();
     res.end(str);
   });
+  */
 
 }
 
@@ -268,4 +324,5 @@ exports.docs = docs;
 exports.dependencies = {
   "viewful": "*"
 };
+
 

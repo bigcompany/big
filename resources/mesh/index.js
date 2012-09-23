@@ -5,12 +5,46 @@ var resource = require('resource'),
     big = require('big'),
     mesh = resource.define('mesh');
 
+//
+// Use the node resource for looking up node schemas
+//
+resource.use('node');
+
 mesh.method('start', start);
 mesh.method('connect', connect, {
-  "description": "Connect to the big mesh "
+  "description": "Connect to the big mesh ",
+  "properties": {
+    "options": {
+      "type": "object",
+      "properties": {
+        "port": resource.node.schema.properties['port'],
+        "host": resource.node.schema.properties['host']
+      }
+    },
+    "callback": {
+      "description": "the callback executed after connecting to mesh",
+      "type": "function",
+      "required": false
+    }
+  }
 });
+
 mesh.method('listen', listen, {
-  "description": "Listens for incoming big instances"
+  "description": "Listens for incoming big instances",
+  "properties": {
+    "options": {
+      "type": "object",
+      "properties": {
+        "port": resource.node.schema.properties['port'],
+        "host": resource.node.schema.properties['host']
+      }
+    },
+    "callback": {
+      "description": "the callback executed after connecting to mesh",
+      "type": "function",
+      "required": false
+    }
+  }
 });
 
 function start () {
@@ -19,13 +53,13 @@ function start () {
 //
 // Connects to a Big mesh to broadcast and listen for events
 //
-function connect () {
+function connect (options, callback) {
 
   var client = require('engine.io-client');
 
   resource.use('system');
 
-  mesh.client = new client.Socket({ host: 'localhost', port: 8000 });
+  mesh.client = new client.Socket({ host: options.host, port: options.port });
 
   mesh.client.on('open', function () {
 
@@ -62,11 +96,11 @@ function connect () {
 
 };
 
-function listen (options) {
+function listen (options, callback) {
 
   var engine = require('engine.io');
 
-  mesh.server = engine.listen(8000)
+  mesh.server = engine.listen(options.port)
 
   mesh.server.on('connection', function (socket) {
 

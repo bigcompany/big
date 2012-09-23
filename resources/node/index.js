@@ -1,12 +1,16 @@
 var resource  = require('resource'),
     node = resource.define('node');
 
-node.property('host', {
-  "type": "string"
+node.property("port", {
+  "type": "number",
+  "default": 7777,
+  "description": "the port of the node"
 });
 
-node.property('port', {
-  "type": "number"
+node.property("host", {
+  "type": "string",
+  "default": "0.0.0.0",
+  "description": "the host of the node"
 });
 
 node.property('events', {

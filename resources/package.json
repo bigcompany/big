@@ -1,0 +1,14 @@
+{
+    "name": "resources",
+    "description": "resources for any occasion",
+    "version": "0.1.0",
+    "author": "Marak",
+    "repository": {
+        "type": "git", 
+        "url": "http://github.com/bigcompany/resources.git" 
+    },
+    "main": "./index",
+    "engine": [
+        "node 0.6.x"
+    ]
+}

@@ -72,7 +72,7 @@ big.start({ port: 80 }, function(err, server){
 //
 // Setup some simple routes for serving tracker information
 //
-big.http.app.get('/info', function(req, res){
+big.http.app.get('/', function(req, res){
   big.node.get('root', function(err, root){
     big.node.all(function(err, nodes){
       res.end(JSON.stringify({

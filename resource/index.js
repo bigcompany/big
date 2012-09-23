@@ -44,31 +44,8 @@ resource.use = function (r, options) {
   this[r].name = r;
 
   //
-  // If exports.hoist has been set to "true",
-  // then all exported resource methods will be attached "above" their resource[name] scope
-  //
-  // In most cases, you should not use hoist.
-  // "eventemitter", is a special case for using exports.hoist = true
-  //
-  if (_r.hoist === true) {
-    for(var p in _r[r]) {
-
-      //
-      // Hoist methods onto resource module scope
-      //
-      resource[p] = _r[r][p];
-
-      //
-      // Also hoist methods onto "this" scope ( which may or may not be the resource module scope )
-      //
-      this[p] = _r[r][p];
-
-    }
-  }
-
-  //
   // Certain method names are considered "special" and will automatically be,
-  // hoisted and aggregated into common event handlers ( regardless of exports.hoist )
+  // hoisted and aggregated into common event handler
   //
   // ex: "start", "listen", "connect"
   //

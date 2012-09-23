@@ -2,6 +2,7 @@
 // The big mesh allows big to communicate with other big instances
 //
 var resource = require('resource'),
+    big = require('big'),
     mesh = resource.define('mesh');
 
 mesh.method('start', start);
@@ -55,7 +56,7 @@ function connect () {
     // Send a friendly phone-home method
     // Feel free to comment this line out at any time
     //
-    big.emit('node::ohai', big.system.info());
+    big.emit('node::ohai', resource.system.info());
 
   });
 

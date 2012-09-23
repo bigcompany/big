@@ -540,6 +540,7 @@ Copyright (c) 2009-2010 Alexis Sellier, Charlie Robbins, Nodejitsu Inc.
           type === 'integer' ? typeof val === 'number' && ~~val === val :
           type === 'null' ? val === null :
           type === 'boolean'? typeof val === 'boolean' :
+          type === 'function'? typeof val === 'function' :
           type === 'any' ? typeof val !== 'undefined' : false) {
         return callback(null, type);
       }

@@ -204,8 +204,9 @@ var instantiate = resource.instantiate = function (schema, levelData) {
 }
 
 //
-// Extends a resource with CRUD methods.
-// This reates model to back resource, and allows the resource to be instantiable
+// Extends a resource with CRUD methods by,
+// creating a JugglingDB model to back the resource,
+// allowing the resource to be instantiable and backed by a datasource
 //
 function crud (r, options) {
 

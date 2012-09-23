@@ -16,8 +16,7 @@ http.property("host", {
 });
 
 http.property("root", {
-  "type": "string",
-  "default": __dirname + "/public"
+  "type": "string"
 });
 
 http.method('start', start, {
@@ -49,11 +48,15 @@ function start (options, callback) {
 
   var app = express();
 
+  if(typeof options.root !== 'undefined') {
+    app
+      .use(connect.static(options.root))
+      .use(connect.directory(options.root));
+  }
+
   app
     .use(connect.favicon())
     .use(connect.logger('dev'))
-    .use(connect.static(options.root))
-    .use(connect.directory(options.root))
     .use(connect.cookieParser())
     .use(connect.session({ secret: 'my secret here' }))
 

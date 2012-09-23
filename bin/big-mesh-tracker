@@ -59,13 +59,15 @@ big.start({ port: 80 }, function(err, server){
   if(err) {
     console.log(err);
   }
-  big.node.create({
-    id: 'root',
-    lastSeen: new Date().toString()
-  }, function(err, result){
-    console.log('done', err, result.id);
+  big.node.get('root', function(err, root){
+    big.node.create({
+      id: 'root',
+      lastSeen: new Date().toString(),
+      events: root.events || 0
+    }, function(err, result){
+      console.log('done', err, result.id);
+    });
   });
-
   console.log('started on ', server.address());
 });
 

@@ -55,14 +55,13 @@ big.on('node::ohai', function(data){
 
 big.listen();
 
-big.start(function(err, server){
+big.start({ port: 80 }, function(err, server){
   if(err) {
     console.log(err);
   }
   big.node.create({
     id: 'root',
-    lastSeen: new Date().toString(),
-    events: 0
+    lastSeen: new Date().toString()
   }, function(err, result){
     console.log('done', err, result.id);
   });

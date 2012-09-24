@@ -41,20 +41,12 @@ if test $? -eq 0; then
   big-help
   echo ""
 
-  read -p "big> " -e command
+  read -p "big > " -e command
 
   while test "$command" != "q" \
   -a "$command" != "exit" \
   -a "$command" != "quit"; do
-    if test "${command:0:5}" = "big"; then
-      big $args ${command:6}
-    else
-      if test "$command" = "help" -o "$command" = "h"; then
-        big-help
-      else
-        echo "invalid command '$command': only use big commands"
-      fi
-    fi
+    big $args ${command:0}
     read -p "big> " -e command
   done
 fi

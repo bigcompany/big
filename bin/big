@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var big = require('../big');
 
 big.use('datasource', { datasource: 'fs' });

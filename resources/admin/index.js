@@ -2,6 +2,8 @@ var resource  = require('resource'),
     admin = resource.define('admin');
 
 resource.use('system');
+resource.use('view');
+resource.use('datasource');
 
 admin.method('start', start);
 
@@ -11,26 +13,31 @@ function start (options, callback) {
 
   resource.http.app.use(connect.static(__dirname + '/public'));
 
+  var view = resource.view.create({ path: __dirname + '/view'});
+  view.load();
+
   resource.http.app.get('/admin', auth, function (req, res, next) {
-    res.end(JSON.stringify(dashboard(), true, 2));
+    var _r = _resources();
+    var str = view.index.render({
+      system: JSON.stringify(dashboard(), true, 2)
+    });
+    res.end(str);
   });
 
   resource.http.app.get('/admin/resources', auth, function (req, res, next) {
-    res.end(JSON.stringify(_resources(), true, 2));
+    var str = view.resources.render({ resources: JSON.stringify(_resources(), true, 2) });
+    res.end(str);
   });
 
   resource.http.app.get('/admin/resources/:resource', auth, function (req, res, next) {
-    //
-    // TODO: better view integration
-    //
-    var formful = require('formful');
     var r = resource.resources[req.param('resource')];
     var obj = resource.toJSON(r);
-    res.end(JSON.stringify(obj, true, 2));
-    return;
-    var str = formful.view.form.index.render(r)
-    var strr = formful.view.form.index.present({ resource: obj });
-    res.end(strr);
+    var str = view.resource.render({
+      name: r.name,
+      schema: JSON.stringify(r.schema, true, 2),
+      methods: JSON.stringify(obj.methods, true, 2)
+    });
+    res.end(str);
   });
 
 }
@@ -44,7 +51,6 @@ exports.dependencies = {
 // TODO: move this out of here to resource.toJSON
 function _resources () {
   var arr = [];
-  console.log(resource.resources);
   Object.keys(resource.resources).forEach(function(r){
     arr.push(r);
   });

@@ -7,9 +7,6 @@
         "type": "git", 
         "url": "http://github.com/bigcompany/resources.git" 
     },
-    "dependencies": {
-      "eventemitter2": "*"
-    }
     "main": "./index",
     "engine": [
         "node 0.6.x"

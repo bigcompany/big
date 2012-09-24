@@ -8,6 +8,9 @@
   "scripts": {
     "start": "node ./bin/big"
   },
+  "dependencies": {
+    "eventemitter2": "*"
+  },
   "bin": {
     "big": "./bin/big"
   },

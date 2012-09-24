@@ -44,7 +44,9 @@ function start (options, callback) {
     var _resource = resource.resources[req.param('resource')];
     var _method = _resource[req.param('method')];
     var str = view.method.render({
-      method: _method.unwrapped.toString()
+      label: req.param('resource') + ' - ' + req.param('method'),
+      method: _method.unwrapped.toString(),
+      schema: JSON.stringify(_method.schema, true, 2)
     });
     res.end(str);
   });

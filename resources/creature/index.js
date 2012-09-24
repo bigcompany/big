@@ -1,8 +1,11 @@
 var resource = require('resource'),
     creature = resource.define('creature');
 
+creature.schema.description = "a resource for creatures like dragons, unicorns, and ponies";
+
 creature.property('type', { type: "string", enum: ['dragon', 'unicorn', 'pony'], default: "dragon"});
 creature.property('life', { type: "number", default: 10 });
+
 
 function poke(callback) {
   if (callback) {
@@ -51,11 +54,11 @@ creature.method('fire', fire, {
           "enum": ["up", "down", "left", "right"],
           "required": true,
           "default": "up"
-        },
-        "callback": {
-          "type": "function",
-          "required": false
         }
+      },
+      "callback": {
+        "type": "function",
+        "required": false
       }
     }
 }});

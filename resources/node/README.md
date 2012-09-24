@@ -12,9 +12,9 @@
 
   - [id](#node-properties-id)
 
-  - [host](#node-properties-host)
-
   - [port](#node-properties-port)
+
+  - [host](#node-properties-host)
 
   - [events](#node-properties-events)
 
@@ -35,13 +35,21 @@
 
   - **type** : any
 
+- **port** 
+
+  - **type** : number
+
+  - **default** : 7777
+
+  - **description** : the port of the node
+
 - **host** 
 
   - **type** : string
 
-- **port** 
+  - **default** : 0.0.0.0
 
-  - **type** : number
+  - **description** : the host of the node
 
 - **events** 
 

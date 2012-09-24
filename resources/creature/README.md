@@ -29,7 +29,7 @@
 <a name="creature-properties"></a>
 
 ## properties 
-
+a resource for creatures like dragons, unicorns, and ponies
 
 - **id** 
 
@@ -102,11 +102,11 @@ fires a lazer at a certain power and direction
 
       - **default** : up
 
-    - **callback** 
+  - **callback**
 
-      - **type** : function
+    - type : *function*
 
-      - **required** : false
+    - required : *false*
 
 <a name="creature-methods-talk"></a> 
 

@@ -53,8 +53,6 @@
 
   - **type** : string
 
-  - **default** : /Users/maraksquires/dev/big/resources/http/public
-
 
 <a name="http-methods"></a> 
 
@@ -91,8 +89,6 @@ starts an http server
     - **root** 
 
       - **type** : string
-
-      - **default** : /Users/maraksquires/dev/big/resources/http/public
 
 - **callback** 
 

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+test -z "$BIG_ROOT" && BIG_ROOT=$HOME
+
+export PATH="/usr/local/bin:/usr/bin:/bin:$HOME/bin"
+
+## the root definition allows multiple users to use the same bin/big
+root=$BIG_ROOT
+while test -e $root; do
+  root=$BIG_ROOT/big-session-$$
+done
+
+args="--bigconf $root/bigconf"
+
+mkdir $root
+mkdir $root/tmp
+
+echo "{
+  \"protocol\": \"http\",
+}" > $root/bigconf
+
+atexit() {
+  big $args logout > /dev/null 2>&1
+  rm -rf $root
+  exit 0
+}
+
+big-help() {
+  local h=$(which big-help 2>/dev/null)
+  test -n "$h" && "$h" || big $args help
+}
+
+trap "atexit" TERM
+trap "atexit" INT
+trap "atexit" HUP
+
+big $args login
+
+if test $? -eq 0; then
+  echo ""
+  big-help
+  echo ""
+
+  read -p "big> " -e command
+
+  while test "$command" != "q" \
+  -a "$command" != "exit" \
+  -a "$command" != "quit"; do
+    if test "${command:0:5}" = "big"; then
+      big $args ${command:6}
+    else
+      if test "$command" = "help" -o "$command" = "h"; then
+        big-help
+      else
+        echo "invalid command '$command': only use big commands"
+      fi
+    fi
+    read -p "big> " -e command
+  done
+fi
+
+atexit

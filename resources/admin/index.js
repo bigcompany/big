@@ -35,7 +35,16 @@ function start (options, callback) {
     var str = view.resource.render({
       name: r.name,
       schema: JSON.stringify(r.schema, true, 2),
-      methods: JSON.stringify(obj.methods, true, 2)
+      methods: JSON.stringify(_methods(r), true, 2)
+    });
+    res.end(str);
+  });
+
+  resource.http.app.get('/admin/resources/:resource/:method', auth, function (req, res, next) {
+    var _resource = resource.resources[req.param('resource')];
+    var _method = _resource[req.param('method')];
+    var str = view.method.render({
+      method: _method.unwrapped.toString()
     });
     res.end(str);
   });
@@ -48,14 +57,27 @@ exports.dependencies = {
   "connect": "*"
 };
 
+//
 // TODO: move this out of here to resource.toJSON
-function _resources () {
-  var arr = [];
-  Object.keys(resource.resources).forEach(function(r){
-    arr.push(r);
-  });
-  return arr;
-}
+//
+  function _resources () {
+    var arr = [];
+    Object.keys(resource.resources).forEach(function(r){
+      arr.push(r);
+    });
+    return arr;
+  }
+  function _methods (resource) {
+    var arr = [];
+    Object.keys(resource.methods).forEach(function(m){
+      arr.push(m);
+    });
+    return arr;
+  }
+//
+//
+//
+
 
 // generates JSON-data to be sent to dashboard view
 function dashboard () {

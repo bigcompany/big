@@ -1,3 +1,9 @@
 var big = require('../big');
+
+big.use('datasource', { datasource: 'fs' });
+big.use('creature', { datasource: 'fs' });
 big.use('cli');
-big.start();
+
+big.start(function(err, server){
+  console.log('started on ', server.address());
+});

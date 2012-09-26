@@ -13,10 +13,9 @@ function poke(callback) {
   }
   return 'poked!';
 }
-function talk (text, target, callback) {
+function talk (text, callback) {
   var result = {
     text: text,
-    target: target,
     status: 200
   }
   if (callback) {
@@ -68,6 +67,7 @@ creature.method('talk', talk, {
   "properties": {
     "text": {
       "type": "string",
+      "default": "hello!",
       "required": true
     }
   }

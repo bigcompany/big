@@ -301,9 +301,23 @@ function crud (r, options) {
   //
   // Find method
   //
-  function find (options, callback){
-    Model.all(options, callback);
+  function find (query, callback) {
+    //
+    // Remove any empty values from the query
+    //
+    for(var k in query) {
+      if(query[k].length === 0) {
+        delete query[k];
+      }
+    }
+    Model.all(query, function(err, results){
+      if (!Array.isArray(results)) {
+        results = [results];
+      }
+      callback(err, results);
+    });
   }
+
   r.method('find', find, {
     "description": "find all instances of " + r.name +  " that matches query",
     "properties": {
@@ -356,9 +370,11 @@ function crud (r, options) {
   // Destroy method
   //
   function destroy (id, callback){
-    Model.destroy(options, callback);
+    Model.find(id, function(err, result){
+      result.destroy(callback);
+    });
   }
-  r.method('destroy', find, {
+  r.method('destroy', destroy, {
     "description": "destroys a " + r.name + " by id",
     "properties": {
       "id": {

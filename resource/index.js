@@ -144,10 +144,6 @@ resource.define = function (name, schema, data) {
   };
 
   //
-  // TODO: Create a new object based on the schema
-  //
-  
-  //
   // TODO: If any additional data has been passed in, assign it to the resource
   //
 
@@ -338,13 +334,13 @@ function crud (r, options) {
   });
 
   //
-  // Save method
+  // Update method
   //
-  function save (options, callback){
-    Model.save(options, callback);
+  function update (options, callback){
+    Model.create(options, callback);
   }
-  r.method('save', save, {
-    "description": "saves " + r.name + " instance. if no id is provided, create is called instead.",
+  r.method('update', update, {
+    "description": "updates " + r.name + " instance. if no id is provided, create is called instead.",
     "properties": {
       "options": {
         "type": "object",
@@ -397,6 +393,7 @@ function addMethod (r, name, method, schema, tap) {
     var payload = [],
         callback = args[args.length -1];
 
+
     //
     // Inside this method, we must take into account any schema,
     // which has been defined with the method signature and validate against it
@@ -429,9 +426,16 @@ function addMethod (r, name, method, schema, tap) {
       //       properties.callback = arguments['1']
       //
       //
-      if (typeof schema.properties === "object") {
+      if (typeof schema.properties === "object" && typeof schema.properties.options === "object") {
+        _data.options = {};
+        Object.keys(schema.properties.options.properties).forEach(function(prop,i){
+          _data.options[prop] = args[0][prop];
+        });
+      }
+
+      if (typeof schema.properties === "object" && typeof schema.properties.options === "undefined") {
         Object.keys(schema.properties).forEach(function(prop,i){
-          _data[prop] = args[i]
+          _data[prop] = args[i];
         });
       }
 
@@ -475,6 +479,34 @@ function addMethod (r, name, method, schema, tap) {
       });
 
       //
+      // Check to see if a callback was expected, but not provided.
+      //
+
+      if(typeof schema.properties === 'object' && typeof schema.properties.callback === 'object' && typeof callback === 'undefined') {
+
+        //
+        // If so, create a "dummy" callback so _method() won't crash
+        //
+        callback = function (err, result) {
+
+          //
+          // In the "dummy" callback, add a throw handler for errors,
+          // so that any possible async error won't die silently
+          //
+          if (err) {
+            throw err;
+          }
+          //
+          // Since a method that expected a callback, was called without a callback,
+          // nothing is done with the result.
+          //
+          // console.log(result);
+          //
+        };
+
+      }
+
+      //
       // Check to see if the last supplied argument was a function.
       // If so, it is assumed the method signature follows the node.js,
       // convention of the last argument being a callback andd will be added to the end of the array
@@ -488,13 +520,16 @@ function addMethod (r, name, method, schema, tap) {
     }
 
     //
-    // Everything seems okay, excecute the method with the modified arguments
+    // Everything seems okay, execute the method with the modified arguments
     //
     return method.apply(this, _args);
   };
 
   // store the schema on the fn for later reference
   fn.schema = schema;
+
+  // store the original method on the fn for later reference ( useful for documentation purposes )
+  fn.unwrapped = method;
 
   //
   // The method is bound onto the "methods" property of the resource
@@ -504,8 +539,9 @@ function addMethod (r, name, method, schema, tap) {
   //
   // The method is also bound directly onto the resource
   //
-  // TODO: add warning / check for override
+  // TODO: add warning / check for override of existing method if r[name] already exists as a function
   r[name] = fn;
+
 }
 
 function addProperty (r, name, schema) {
@@ -545,17 +581,21 @@ function hoistMethods (r, self) {
   }
 }
 
-
 //
 // Creates a "safe" non-circular JSON object for easy stringification purposes
 //
 resource.toJSON = function (r) {
-  var obj = {};
+
+  if (typeof r === 'undefined') {
+    throw new Error('resource is a required argument');
+  }
+
   var obj = {
     name: r.name,
     schema: r.schema,
     methods: methods(r)
   }
+
   function methods (r) {
     var obj = {};
     for(var m in r.methods) {
@@ -563,6 +603,7 @@ resource.toJSON = function (r) {
     }
     return obj;
   }
+
   return obj;
 };
 

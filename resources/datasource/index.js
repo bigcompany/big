@@ -1,6 +1,8 @@
 var resource = require('resource'),
     datasource = resource.define('datasource');
 
+datasource.schema.description = "perists resources to data storage engines";
+
 datasource.property('name', {
   type: "string",
   description: "The name of the new datasource",

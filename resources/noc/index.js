@@ -16,10 +16,12 @@ var resource = require('resource'),
     fs = require('fs'),
     sys = require('sys');
 
+noc.schema.description = "Node Operations Center";
+
 resource.use('node');
 
 noc.method('noc', _noc, {
-  "description": "the [N]ode [O]perations [C]enter, bootstraps new servers into big nodes",
+  "description": "the [n]ode [o]perations [c]enter, bootstraps new servers into big nodes",
   "properties": {
     "options": {
       "type": "object",
@@ -73,6 +75,7 @@ function _noc (options, callback) {
    // which are executed sequentially
    //
    commands = commands.join(' && ');
+
    //
    // Spawn SSH binary as child process
    //
@@ -88,6 +91,10 @@ function _noc (options, callback) {
      })
    });
 
+   ssh.stderr.on('data', function (err) {
+     process.stdout.write(err);
+   });
+
    ssh.stdout.on('data', function (out) {
      process.stdout.write(out);
      if (!loggedIn) {
@@ -96,13 +103,9 @@ function _noc (options, callback) {
          ssh.stdin.write(chunk);
        });
      }
-
      loggedIn = true;
    });
 
-   ssh.stderr.on('data', function (err) {
-     process.stdout.write(err);
-   });
 
  });
 

@@ -1,6 +1,8 @@
 var resource  = require('resource'),
     node = resource.define('node');
 
+node.schema.description = "for managing nodes";
+
 node.property("port", {
   "type": "number",
   "default": 7777,

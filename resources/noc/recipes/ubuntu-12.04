@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+
+#
+#  noc - ubuntu-12.04
+#
+#  bootstraps a fresh ubuntu-12.04 image with stable node.js and tiny replicator
+#
+#
+
+# update apt-get
+apt-get -y update
+
+# install git
+apt-get -y install git-core
+
+# clone node from github
+git clone https://github.com/joyent/node.git
+
+# change directory into node
+cd node
+
+# checkout a reasonable node version
+git checkout v0.8.9
+
+# install some missing deps
+apt-get -y install g++ curl libssl-dev apache2-utils
+
+# configure
+./configure
+
+# install make
+apt-get -y install make
+
+# make
+sudo make
+
+# install
+sudo make install
+
+# remove the update-motd
+rm -rf /etc/update-motd.d/*.*

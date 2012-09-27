@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+#
+#  noc - ls-test
+#
+#  simple ls test
+#
+#
+
+# run ls
+ls -a

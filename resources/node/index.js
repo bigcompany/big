@@ -18,6 +18,20 @@ node.property('events', {
   "type": "number"
 });
 
+node.property('username', {
+  "description": "the username used to log into the node",
+  "type": "string",
+  "default": "root",
+  "required": false
+});
+
+node.property('password', {
+  "description": "the password used to log into the node",
+  "type": "string",
+  "required": false
+});
+
+
 node.property('system', {
   "description": "a dump of the node's system information ( from node.process and require('os') module )",
   "type": "object"

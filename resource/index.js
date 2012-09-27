@@ -150,7 +150,7 @@ resource.define = function (name, schema, data) {
   //
   // Attach a copy of the resource to the resources scope ( for later reference )
   //
-  resource.resources[name] = r
+  resource.resources[name] = r;
 
   //
   // Return the new resource
@@ -319,7 +319,7 @@ function crud (r, options) {
   }
 
   r.method('find', find, {
-    "description": "find all instances of " + r.name +  " that matches query",
+    "description": "search for instances of " + r.name,
     "properties": {
       "options": {
         "type": "object",
@@ -339,7 +339,7 @@ function crud (r, options) {
   }
 
   r.method('all', all, {
-    "description": "find all instances of " + r.name,
+    "description": "get all instances of " + r.name,
     "properties": {
       "callback": {
         "type": "function"
@@ -354,7 +354,7 @@ function crud (r, options) {
     Model.create(options, callback);
   }
   r.method('update', update, {
-    "description": "updates " + r.name + " instance. if no id is provided, create is called instead.",
+    "description": "updates a " + r.name + " by id",
     "properties": {
       "options": {
         "type": "object",
@@ -445,7 +445,9 @@ function addMethod (r, name, method, schema, tap) {
       if (typeof schema.properties === "object" && typeof schema.properties.options === "object") {
         _data.options = {};
         Object.keys(schema.properties.options.properties).forEach(function(prop,i){
-          _data.options[prop] = args[0][prop];
+          if(typeof args[0] !== 'undefined') {
+            _data.options[prop] = args[0][prop];
+          }
         });
       }
 

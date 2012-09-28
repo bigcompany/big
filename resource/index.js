@@ -121,7 +121,8 @@ resource.define = function (name, schema, data) {
   r.name = name;
   r.methods = {};
   r.schema = {
-    properties: {
+    "description": "",
+    "properties": {
       "id": {
         "type": "any"
       }
@@ -398,6 +399,12 @@ function crud (r, options) {
 //
 function addMethod (r, name, method, schema, tap) {
 
+  schema = schema || {};
+
+  if (typeof schema.description === 'undefined') {
+    schema.description = "";
+  }
+
   //
   // Create a new method that will act as a wrap for the passed in "method"
   //
@@ -408,7 +415,6 @@ function addMethod (r, name, method, schema, tap) {
 
     var payload = [],
         callback = args[args.length -1];
-
 
     //
     // Inside this method, we must take into account any schema,
@@ -501,7 +507,6 @@ function addMethod (r, name, method, schema, tap) {
       //
 
       if(typeof schema.properties === 'object' && typeof schema.properties.callback === 'object' && typeof callback === 'undefined') {
-
         //
         // If so, create a "dummy" callback so _method() won't crash
         //

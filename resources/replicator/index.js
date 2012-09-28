@@ -51,11 +51,11 @@ replicator.method('pull', pull, {
   }
 });
 
-replicator.method('listen', start, {
-  "description": "starts a lisenting replicator service capable of recieving big push requests"
+replicator.method('listen', listen, {
+  "description": "starts a listening replicator service capable of recieving big push requests"
 });
 
-function start () {
+function listen () {
 
   resource.http.app.get('/replicator', function(req, res) {
     // TODO: build replicator status page
@@ -76,6 +76,9 @@ function start () {
     var tmpPath = req.files.snapshot.path;
     //
     // Set destination path
+    //
+    //
+    // TODO: destination path should be in separate user home directory
     //
     var targetPath = __dirname + '/snapshots/' + req.files.snapshot.name;
 
@@ -106,6 +109,18 @@ function start () {
              path: targetPath,
              location: "fs"
            }, function(err, result){
+
+             //
+             // Remove the current source directory ( DANGER )
+             //
+
+             //
+             // Move the contents of the snapshot into the current dir
+             //
+
+             //
+             // Put a start command on the next tick, and stop process
+             //
              console.log('pulled', err, result);
            });
        });
@@ -155,7 +170,7 @@ function extract (options, callback) {
   // and pipe that to Gunzip which will extract the contents of the tar
   //
   fs.createReadStream(options.path).pipe(zlib.Gunzip()).pipe(extractor).on('end', function () {
-    callback(null);
+    callback(null, options.path);
   });
 
 };
@@ -163,23 +178,39 @@ function extract (options, callback) {
 // pushes current big instance to another
 function push (options, callback) {
 
+  var request = require('request');
+
   //
   // TODO
   //
 
   // create tarball of local instance
-  compress(options, callback);
+  compress(options, function(err, result){
 
-  // connect to remote server
-  
-    // if no connection can be found, throw error
-    // in the future, we could add prompt to noc noc over ssh and try push again
-  
-  // upload local instance to remote
-  
-  // remote instance restarts and pipes back success / fail message
-  
-  // win!
+    //
+    // Connect to remote server
+    //
+    var r = request.post('http://localhost:8888/replicator');
+    var form = r.form();
+
+    //
+    // Upload local instance to remote
+    //
+    form.append('snapshot', fs.createReadStream(__dirname + '/snapshots/' + result));
+    r.on('end', callback);
+
+    //
+    // TODO:
+    //
+      // if no connection can be found, throw error
+      // in the future, we could add prompt to noc noc over ssh and try push again
+
+    // remote instance restarts and pipes back success / fail message
+
+    // win!
+
+  });
+
   
 }
 
@@ -228,5 +259,6 @@ exports.replicator = replicator;
 exports.dependencies = {
   "fstream": "*",
   "fstream-npm": "*",
-  "tar": "*"
+  "tar": "*",
+  "request": "*"
 };

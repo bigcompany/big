@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+var big = require('../big');
+
+big.use('http');
+big.use('replicator');
+
+big.start(function(err, server){
+  if (err) {
+    throw err;
+  }
+  console.log('replicator service listening on port ' + server.address().port);
+});

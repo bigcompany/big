@@ -1,0 +1,11 @@
+var big = require('../big');
+big.use('creature', { datasource: 'fs' });
+big.use('datasource', { datasource: 'fs' });
+big.use('video', { datasource: 'fs' });
+
+big.use('http');
+big.use('admin');
+
+big.start(function(err, server){
+  console.log('started on ', server.address());
+});

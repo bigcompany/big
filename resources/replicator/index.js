@@ -1,5 +1,6 @@
 var resource  = require('resource'),
     replicator = resource.define('replicator'),
+    path = require('path'),
     fs = require('fs');
 
 replicator.schema.description = "replicator service for big instances";
@@ -42,6 +43,10 @@ replicator.method('pull', pull, {
           "description": "the type of location big is pulling from",
           "type": "string",
           "enum": ["fs", "http"]
+        },
+        "targetDir": {
+          "description": "the location to extract big instance",
+          "type": "string"
         }
       }
     },
@@ -74,13 +79,12 @@ function listen () {
     // Get the temporary upload location of the file
     //
     var tmpPath = req.files.snapshot.path;
+
     //
     // Set destination path
     //
-    //
-    // TODO: destination path should be in separate user home directory
-    //
-    var targetPath = __dirname + '/snapshots/' + req.files.snapshot.name;
+    var targetPath = process.env.HOME + '/.big/snapshots/remote/' + req.files.snapshot.name,
+        targetDir = process.env.HOME + '/.big/snapshots/remote/' + req.files.snapshot.name + '/';
 
     //
     // TODO only allow tar files
@@ -107,21 +111,34 @@ function listen () {
            //
            replicator.pull({
              path: targetPath,
+             targetDir: targetDir,
              location: "fs"
            }, function(err, result){
+             if (err) {
+               throw err;
+             }
+
+             console.log('pulled remote snapshot to ' + targetDir);
 
              //
-             // Remove the current source directory ( DANGER )
+             // Prepare the current big instance for an update
+             // This includes creating a backup of the current instance in ~./.big/snapshots/local/
              //
-
-             //
-             // Move the contents of the snapshot into the current dir
-             //
-
-             //
-             // Put a start command on the next tick, and stop process
-             //
-             console.log('pulled', err, result);
+             prepareForUpdate(function(err, result) {
+               //
+               // After the current instance has been prepared for an update,
+               // actually run the update
+               //
+               update(targetPath + '/package', path.resolve('.'), function(err, result){
+                 if (err) {
+                   throw err;
+                 }
+                 console.log('moved remote snapshot to ' + path.resolve('.'));
+                 console.log('restart needed to update');
+                 console.log('exiting process.... ( there should be a process monitor watching this )');
+                 process.exit();
+               });
+             });
            });
        });
     });
@@ -130,59 +147,76 @@ function listen () {
 
 };
 
-function compress (options, callback) {
+function prepareForUpdate (callback) {
 
-  var fstream = require('fstream'),
-  fstreamNpm = require('fstream-npm'),
-  zlib = require('zlib'),
-  tar = require('tar'),
-  name = tarName();
-
-  fstreamNpm({ path: options.path })
-    .on('error', callback)
-    .pipe(tar.Pack())
-    .on('error', callback)
-    .pipe(zlib.Gzip())
-    .on('error', callback)
-    .pipe(fstream.Writer({ type: "File", path: __dirname + '/snapshots/' + name}))
-    .on('close', function () {
-      callback(null, name);
-    });
-
-};
-
-function extract (options, callback) {
-
-  var fstream = require('fstream'),
-  fstreamNpm = require('fstream-npm'),
-  zlib = require('zlib'),
-  tar = require('tar');
+  var path = require('path'),
+      ncp = require('ncp').ncp,
+      name = tarName();
 
   //
-  // Choose the directory where the snapshot will be extracted
+  // Create a backup of the current version ( just in case )
   //
-  var extractor = new tar.Extract({ 
-    path:  __dirname + '/snapshots' 
+  compress({
+    path: '.',
+    targetPath: process.env.HOME + '/.big/snapshots/local/' + name,
+    name: name
+  }, function(err, result) {
+
+    if (err) {
+      //
+      // It's important to not continue if the backup was not made,
+      // without a backup, deleting the local could cause loss of files
+      //
+      console.log('error in backing up local copy. do not continue.')
+      throw err;
+      return;
+    }
+
+   console.log('current instance has been backed up to ', err, result);
+
+    //
+    // TODO: Remove the current source directory
+    //
+    // Leaving this commented out for development
+    // The current update behavior will overwrite older copies of files
+    //
+    // console.log('WARN: about to delete' + path.resolve('.'));
+    // fs.rmdir(path, [callback])
+
+    callback(null);
   });
 
+}
+
+function update (source, target, callback) {
+
+  var ncp = require('ncp').ncp;
+
   //
-  // Read in the contents of the snapshot as a stream, 
-  // and pipe that to Gunzip which will extract the contents of the tar
+  // Set ncp max concurrency to 16
   //
-  fs.createReadStream(options.path).pipe(zlib.Gunzip()).pipe(extractor).on('end', function () {
-    callback(null, options.path);
+  ncp.limit = 16;
+
+  //
+  // Copy all the files from /.big/snapshots/remote/the-snapshot/ to the current working directory
+  //
+  ncp(source, target, function (err) {
+   if (err) {
+     return callback(err);
+     return console.error(err);
+   }
+   callback(null, 'copied');
   });
 
-};
+}
 
 // pushes current big instance to another
 function push (options, callback) {
 
   var request = require('request');
 
-  //
-  // TODO
-  //
+  options.name = tarName();
+  options.targetPath = process.env.HOME + '/.big/snapshots/local/' + options.name;
 
   // create tarball of local instance
   compress(options, function(err, result){
@@ -196,8 +230,10 @@ function push (options, callback) {
     //
     // Upload local instance to remote
     //
-    form.append('snapshot', fs.createReadStream(__dirname + '/snapshots/' + result));
+    form.append('snapshot', fs.createReadStream(process.env.HOME + '/.big/snapshots/local/' + result));
     r.on('end', callback);
+
+    // TODO: remote instance restarts and pipes back success / fail message
 
     //
     // TODO:
@@ -205,40 +241,74 @@ function push (options, callback) {
       // if no connection can be found, throw error
       // in the future, we could add prompt to noc noc over ssh and try push again
 
-    // remote instance restarts and pipes back success / fail message
-
-    // win!
-
   });
 
-  
 }
 
-// pulls down a big instance to current
+//
+// "Pulls" a big instance from a local or remote source,
+//  and extracts it
+//
 function pull (options, callback) {
-  
   //
-  // TODO
+  // Extract tarball into the /.big/snapshots/remote/ folder
   //
-  
-  // determine if path to pull is a remote of local file
-  
-    // if local, pull from hd
-  
-    // if remote, connect to remote server
-  
-  // get the tar ball
-  
-  // move the tarball from its location into the "active" folder
-  
-  // extract tarball
-  extract(options, callback);
-  
-  // restart instance locally
-  
-  // win!
-  
+  extract(options, function(err, result){
+    callback(err, result);
+  });
+  //
+  // TODO: determine if path to pull is a remote of local file
+  //
+    // if local, extract to hd
+    // if remote, fetch tar from remote server, then extract to hd
 }
+
+function extract (options, callback) {
+
+  var fstream = require('fstream'),
+  fstreamNpm = require('fstream-npm'),
+  zlib = require('zlib'),
+  tar = require('tar');
+
+  //
+  // Choose the directory where the snapshot will be extracted
+  //
+  var extractor = new tar.Extract({
+    path: options.targetDir
+  });
+
+  //
+  // Read in the contents of the snapshot as a stream,
+  // and pipe that to Gunzip which will extract the contents of the tar
+  //
+  fs.createReadStream(options.path).pipe(zlib.Gunzip()).pipe(extractor).on('end', function () {
+    callback(null, {
+      source: options.path,
+      target: options.targetDir
+    });
+  });
+
+};
+
+function compress (options, callback) {
+
+  var fstream = require('fstream'),
+  fstreamNpm = require('fstream-npm'),
+  zlib = require('zlib'),
+  tar = require('tar');
+
+  fstreamNpm({ path: options.path })
+    .on('error', callback)
+    .pipe(tar.Pack())
+    .on('error', callback)
+    .pipe(zlib.Gzip())
+    .on('error', callback)
+    .pipe(fstream.Writer({ type: "File", path: options.targetPath }))
+    .on('close', function () {
+      callback(null, options.name);
+    });
+
+};
 
 //
 // Creates a new tar file name based on current time
@@ -250,9 +320,25 @@ function tarName () {
   name = name.replace(/ /g, '-');
   name = name.replace(/\)/g, '');
   name = name.replace(/\(/g, '');
+  name += ('-' + miniID());
   name += '.tar';
   return name;
 };
+
+//
+// Since date/times are being used as unique ids for tars,
+// a small unique indentifer needs to be appended to the tar name,
+// to ensure uniqueness in case multiple tars are,
+// generated in the same second ( yes, that can happen )
+//
+function miniID () {
+  var text = "",
+      possible = "0123456789ABCDEFxx";
+  for( var i=0; i < 5; i++ ) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
 
 exports.replicator = replicator;
 
@@ -260,5 +346,6 @@ exports.dependencies = {
   "fstream": "*",
   "fstream-npm": "*",
   "tar": "*",
-  "request": "*"
+  "request": "*",
+  "ncp": "*"
 };

@@ -18,6 +18,10 @@
 
   - [events](#node-properties-events)
 
+  - [username](#node-properties-username)
+
+  - [password](#node-properties-password)
+
   - [system](#node-properties-system)
 
   - [lastSeen](#node-properties-lastSeen)
@@ -29,7 +33,7 @@
 <a name="node-properties"></a>
 
 ## properties 
-
+for managing nodes
 
 - **id** 
 
@@ -56,6 +60,24 @@
   - **description** : the total amount of events processed by this node
 
   - **type** : number
+
+- **username** 
+
+  - **description** : the username used to log into the node
+
+  - **type** : string
+
+  - **default** : root
+
+  - **required** : false
+
+- **password** 
+
+  - **description** : the password used to log into the node
+
+  - **type** : string
+
+  - **required** : false
 
 - **system** 
 

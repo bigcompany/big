@@ -35,7 +35,7 @@
 <a name="datasource-properties"></a>
 
 ## properties 
-
+perists resources to data storage engines
 
 - **id** 
 

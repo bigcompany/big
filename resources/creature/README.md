@@ -29,7 +29,7 @@
 <a name="creature-properties"></a>
 
 ## properties 
-a resource for creatures like dragons, unicorns, and ponies
+for creatures like dragons, unicorns, and ponies
 
 - **id** 
 
@@ -117,6 +117,8 @@ echos back a string
 - **text** 
 
   - **type** : string
+
+  - **default** : hello!
 
   - **required** : true
 

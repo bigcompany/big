@@ -63,7 +63,7 @@ views the Markdown documentation for any resource
 
   - **description** : the resource to view documentation for
 
-  - **type** : function
+  - **type** : any
 
   - **required** : true
 

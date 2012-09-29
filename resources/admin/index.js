@@ -1,6 +1,8 @@
 var resource  = require('resource'),
     admin = resource.define('admin');
 
+admin.schema.description = "web based admin panel for big";
+
 resource.use('system');
 resource.use('view');
 resource.use('datasource');

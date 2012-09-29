@@ -1,6 +1,6 @@
 # api
 
-
+provides a web API for interacting with big
 
 ## API
 
@@ -21,7 +21,7 @@
 <a name="api-properties"></a>
 
 ## properties 
-
+provides a web API for interacting with big
 
 - **id** 
 

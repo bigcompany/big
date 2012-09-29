@@ -1,6 +1,6 @@
 # video
 
-
+for managing online digital videos
 
 ## API
 
@@ -25,7 +25,7 @@
 <a name="video-properties"></a>
 
 ## properties 
-
+for managing online digital videos
 
 - **id** 
 

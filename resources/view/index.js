@@ -1,6 +1,8 @@
 var resource = require('resource'),
     view = resource.define('view');
 
+view.schema.description = "View engine";
+
 view.property("path", {
   "type": "string",
   "default": ".", 

@@ -1,6 +1,6 @@
 # mesh
 
-
+distributed p2p event emitter mesh resource
 
 ## API
 
@@ -18,7 +18,7 @@
   - [listen](#mesh-methods-listen) (options, callback)
 
 
-
+distributed p2p event emitter mesh resource
 
 - **id** 
 

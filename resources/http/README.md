@@ -1,6 +1,6 @@
 # http
 
-
+HTTP server resource
 
 ## API
 
@@ -23,7 +23,7 @@
 <a name="http-properties"></a>
 
 ## properties 
-
+HTTP server resource
 
 - **id** 
 

@@ -1,6 +1,6 @@
 # socket
 
-
+socket.io websocket resource
 
 ## API
 
@@ -14,7 +14,7 @@
   - [start](#socket-methods-start) (callback)
 
 
-
+socket.io websocket resource
 
 - **id** 
 

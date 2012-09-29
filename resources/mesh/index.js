@@ -5,6 +5,8 @@ var resource = require('resource'),
     big = require('big'),
     mesh = resource.define('mesh');
 
+mesh.schema.description = "distributed p2p event emitter mesh resource";
+
 //
 // Use the node resource for looking up node schemas
 //
@@ -60,6 +62,10 @@ function connect (options, callback) {
   resource.use('system');
 
   mesh.client = new client.Socket({ host: options.host, port: options.port });
+
+  mesh.client.on('error', function (err) {
+    console.log(err)
+  });
 
   mesh.client.on('open', function () {
 

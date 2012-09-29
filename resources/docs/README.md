@@ -1,6 +1,6 @@
 # docs
 
-
+generates documentation
 
 ## API
 
@@ -18,7 +18,7 @@
   - [view](#docs-methods-view) (resource)
 
 
-
+generates documentation
 
 - **id** 
 

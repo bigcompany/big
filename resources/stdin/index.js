@@ -1,6 +1,8 @@
 var resource   = require('resource'),
     stdin = resource.define('stdin');
 
+stdin.schema.decription = "allows application to listen for input from STDIN";
+
 stdin.method('start', start, {
   "description": "listens for STDIN on the process and attempts to eval it as JavaScript"
 });

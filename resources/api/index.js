@@ -1,6 +1,8 @@
 var resource = require('resource'),
     api = resource.define('api');
 
+api.schema.description = "provides a web API for interacting with big";
+
 api.property('version', {
   "description": "the semantic version of the API",
   "type": "string",

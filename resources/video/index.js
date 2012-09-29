@@ -1,6 +1,8 @@
 var resource = require('resource'),
     video = resource.define('video');
 
+video.schema.description = "for managing online digital videos";
+
 video.property("title", {
   "type":"string",
   "default": "my title",

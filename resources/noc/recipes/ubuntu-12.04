@@ -25,6 +25,9 @@ git checkout v0.8.9
 # install some missing deps
 apt-get -y install g++ curl libssl-dev apache2-utils
 
+# install some useful tools
+apt-get -y install members
+
 # configure
 ./configure
 
@@ -37,5 +40,20 @@ sudo make
 # install
 sudo make install
 
+# back to home
+cd ..
+
 # remove the update-motd
 rm -rf /etc/update-motd.d/*.*
+
+# clone big from github
+git clone git@github.com:bigcompany/big.git
+
+# change directory into big
+cd big
+
+# install npm deps
+sudo npm install
+
+# start big replicator
+node bin/replicator

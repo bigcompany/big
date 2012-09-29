@@ -1,7 +1,7 @@
 var resource  = require('resource'),
     http = resource.define('http');
 
-http.name = "http";
+http.schema.description = "HTTP server resource";
 
 http.property("port", {
   "type": "number",
@@ -27,7 +27,11 @@ http.method('start', start, {
       "properties": {
         "port": http.schema.properties['port'],
         "host": http.schema.properties['host'],
-        "root": http.schema.properties['root']
+        "root": http.schema.properties['root'],
+        "enableUploads": {
+          "type": "boolean",
+          "default": true
+        }
       }
     },
     "callback": {
@@ -60,6 +64,15 @@ function start (options, callback) {
     .use(connect.cookieParser())
     .use(connect.session({ secret: 'my secret here' }))
 
+  if(options.enableUploads === true) {
+    app
+    .use(express.bodyParser({
+      uploadDir: __dirname + '/uploads',
+      keepExtensions: true
+    }))
+  }
+
+
    http.server = server = require('http').createServer(app).listen(options.port, options.host, function(){
       callback(null, server);
    });
@@ -70,5 +83,6 @@ function start (options, callback) {
 exports.http = http;
 
 exports.dependencies = {
-  "connect": "*"
+  "connect": "*",
+  "express": "*"
 };

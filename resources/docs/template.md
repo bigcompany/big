@@ -1,10 +1,8 @@
 # {{name}}
 
+{{desc}}
+
 {{tagline}}
-
-# usage
-
-{{usage}}
 
 {{toc}}
 

@@ -3,6 +3,8 @@ var resource = require('resource'),
     fs = require('fs'),
     viewful = require('viewful');
 
+docs.schema.description = "generates documentation";
+
 docs.method('generate', generate, {
   "description": "generates markdown documentation from a resource",
   "properties": {
@@ -25,7 +27,7 @@ docs.method('view', view, {
   "properties": {
     "resource": {
       "description": "the resource to view documentation for",
-      "type": "function",
+      "type": "any",
       "required": true
     }
   }
@@ -54,7 +56,8 @@ function generate (resource, template) {
 
   var data = {
     toc: tableOfContents(resource),
-    name: resource.name,
+    name: resource.name + '\n',
+    desc: resource.schema.description,
     usage: resourceUsage(resource),
     properties: resourceProperties(resource),
     methods: resourceMethods(resource),
@@ -68,7 +71,9 @@ function generate (resource, template) {
 };
 
 function view (resource) {
-  var md = fs.readFileSync(__dirname + '/../' + resource + '/README.md').toString();
+  fs.readFile(__dirname + '/../' + resource + '/README.md', function(err, result){
+    console.log(err, result.toString())
+  })
 };
 
 function resourceProperties (resource) {
@@ -185,7 +190,7 @@ function resourceUsage (resource) {
 function tableOfContents (resource) {
 
   // Header
-  var str = '## ' + resource.name + '\n\n';
+  var str = '## API\n\n';
 
   if(typeof resource.schema === 'undefined' || typeof resource.schema.properties === 'undefined') {
     return str;
@@ -265,10 +270,10 @@ function build () {
   var str = '# resources \n\n';
   str += 'big resources for any occasion \n\n'
   Object.keys(_resources).forEach(function(r){
-    str += ' - [' + r + '](https://github.com/bigcompany/resources/tree/master/' + r +')\n';
+    str += ' - [' + r + '](https://github.com/bigcompany/big/tree/master/resources/' + r +') ' + resource.resources[r].schema.description + '\n';
   });
-  fs.writeFileSync('./README.md', str);
-  console.log('wrote to core README.md file'.green);
+  fs.writeFileSync('./resources/README.md', str);
+  console.log('wrote to core resource README.md file'.green);
 }
 
 

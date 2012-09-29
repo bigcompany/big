@@ -33,12 +33,20 @@ resource.use = function (r, options) {
   // If the required resource doesn't have the expected exported scope,
   // throw a friendly error message
   //
-  if(typeof _r[r] === 'undefined') {
+  if (typeof _r[r] === 'undefined') {
     throw new Error("exports." + r + " is not defined in the " + r + ' resource!')
   }
 
   //
-  // Also, attach a copy of the resource to "this" scope ( which may or may not be the resource module scope )
+  // Determine if a exports.dependencies hash has been specified,
+  // if so, determine if there are any missing deps that will need to be installed
+  //
+  if (typeof _r.dependencies === 'object') {
+    resource.installDeps( _r.dependencies);
+  }
+
+  //
+  // Attach a copy of the resource to "this" scope ( which may or may not be the resource module scope )
   //
   this[r] = _r[r];
   this[r].name = r;
@@ -168,6 +176,72 @@ var mappings = {
   "couchdb": "cradle"
 };
 
+//
+// Installs missing deps
+//
+resource.installDeps = function (deps) {
+
+  //
+  // TODO: make this work with remote files as well as local
+  //
+
+  var _command = ["install"];
+
+  resource.installing = 0;
+
+  Object.keys(deps).forEach(function(dep){
+    //
+    // Check to see if the dep is available
+    //
+    try {
+      console.log(require.resolve(dep));
+    } catch (err) {
+      _command.push(dep);
+      //
+      // For development purposes, install everything globally for now
+      //
+      _command.push('-g');
+    }
+  });
+
+
+  if(_command.length === 1) {
+    return;
+  }
+
+  resource.installing++;
+
+  //
+  // Spawn npm as child process to perform installation
+  //
+  console.log('about to run npm ' + _command);
+  var spawn = require('child_process').spawn,
+      ls    = spawn('npm', _command);
+
+  ls.stdout.on('data', function (data) {
+    if(data.length > 0) {
+      //console.log(data.toString());
+    }
+  });
+
+  ls.stderr.on('data', function (data) {
+    if(data.length > 0) {
+      //console.log(data.toString());
+    }
+  });
+
+  ls.on('exit', function (code) {
+    console.log('child process exited with code ' + code);
+    resource.installing--;
+    console.log(resource.installing)
+    if(resource.installing === 0) {
+      for(var m in resource._queue){
+        console.log('done installing, running commands')
+        resource._queue[m]();
+      }
+    }
+  });
+};
 
 //
 // Creates a new instance of a schema based on default data as arguments array
@@ -571,6 +645,8 @@ function addProperty (r, name, schema) {
   r.schema.properties[name] = schema;
 }
 
+resource._queue = [];
+
 //
 // Aggregates and hoists any "special" defined methods, such as "start", "listen", "connect", etc...
 //
@@ -581,7 +657,6 @@ function hoistMethods (r, self) {
   var hoist = ['start', 'connect', 'listen']; // TODO: un-hardcode configurable hoist methods
   for (var m in r.methods) {
     if (typeof r.methods[m] === 'function' && hoist.indexOf(m) !== -1) {
-
       function queue (m) {
         if(typeof self['_' + m] === "undefined") {
           self['_' + m] = [];
@@ -593,7 +668,13 @@ function hoistMethods (r, self) {
                 callback = options;
                 options = {};
               }
-              fn(options, callback);
+              if(resource.installing > 0) {
+                resource._queue.push(function(){
+                  fn(options, callback);
+                });
+              } else {
+                fn(options, callback);
+              }
             });
           };
         }

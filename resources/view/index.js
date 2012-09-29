@@ -1,7 +1,7 @@
 var resource = require('resource'),
     view = resource.define('view');
 
-view.schema.description = "View engine";
+view.schema.description = "templating / markup engine with 22+ supported languages";
 
 view.property("path", {
   "type": "string",

@@ -62,14 +62,14 @@ function start (options, callback) {
     .use(connect.favicon())
     .use(connect.logger('dev'))
     .use(connect.cookieParser())
-    .use(connect.session({ secret: 'my secret here' }))
+    .use(connect.session({ secret: 'my secret here' }));
 
   if(options.enableUploads === true) {
     app
     .use(express.bodyParser({
       uploadDir: __dirname + '/uploads',
       keepExtensions: true
-    }))
+    }));
   }
 
 

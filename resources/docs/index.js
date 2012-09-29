@@ -19,11 +19,11 @@ docs.method('generate', generate, {
 });
 
 docs.method('build', build, {
-  "description": "generates Markdown documentation for all resources"
+  "description": "generates markdown documentation for all resources"
 });
 
 docs.method('view', view, {
-  "description": "views the Markdown documentation for any resource",
+  "description": "view the documentation for a resource",
   "properties": {
     "resource": {
       "description": "the resource to view documentation for",
@@ -71,8 +71,8 @@ function generate (resource, template) {
 };
 
 function view (resource) {
-  fs.readFile(__dirname + '/../' + resource + '/README.md', function(err, result){
-    console.log(err, result.toString())
+  fs.readFile(__dirname + '/../' + resource + '/README.md', function(err, result) {
+    console.log(result.toString());
   })
 };
 

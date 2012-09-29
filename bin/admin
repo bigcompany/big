@@ -5,7 +5,8 @@ big.use('video', { datasource: 'fs' });
 
 big.use('http');
 big.use('admin');
+big.use('replicator');
 
 big.start(function(err, server){
-  console.log('started on ', server.address());
+  console.log('big admin started on', server.address().port);
 });

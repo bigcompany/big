@@ -1,12 +1,8 @@
 # noc
 
+Node Operations Center
 
-# usage
-
-    var big = require("big");
-    big.use("noc");
-
-## noc
+## API
 
 #### [properties](#noc-properties)
 

@@ -1,12 +1,8 @@
 # admin
 
+web based admin panel for big
 
-# usage
-
-    var big = require("big");
-    big.use("admin");
-
-## admin
+## API
 
 #### [properties](#admin-properties)
 
@@ -18,7 +14,7 @@
   - [start](#admin-methods-start) ()
 
 
-
+web based admin panel for big
 
 - **id** 
 

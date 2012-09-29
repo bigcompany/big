@@ -1,12 +1,8 @@
 # user
 
+for managing users
 
-# usage
-
-    var big = require("big");
-    big.use("user");
-
-## user
+## API
 
 #### [properties](#user-properties)
 

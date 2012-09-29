@@ -1,12 +1,8 @@
 # replicator
 
+replicator service for big instances
 
-# usage
-
-    var big = require("big");
-    big.use("replicator");
-
-## replicator
+## API
 
 #### [properties](#replicator-properties)
 

@@ -1,12 +1,8 @@
 # view
 
 
-# usage
 
-    var big = require("big");
-    big.use("view");
-
-## view
+## API
 
 #### [properties](#view-properties)
 

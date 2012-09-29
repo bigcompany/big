@@ -1,12 +1,8 @@
 # cli
 
+provides a command line interface to big
 
-# usage
-
-    var big = require("big");
-    big.use("cli");
-
-## cli
+## API
 
 #### [properties](#cli-properties)
 
@@ -18,7 +14,7 @@
   - [start](#cli-methods-start) ()
 
 
-
+provides a command line interface to big
 
 - **id** 
 

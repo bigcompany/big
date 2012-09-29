@@ -1,12 +1,8 @@
 # docs
 
 
-# usage
 
-    var big = require("big");
-    big.use("docs");
-
-## docs
+## API
 
 #### [properties](#docs-properties)
 

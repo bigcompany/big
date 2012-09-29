@@ -1,12 +1,8 @@
 # video
 
 
-# usage
 
-    var big = require("big");
-    big.use("video");
-
-## video
+## API
 
 #### [properties](#video-properties)
 

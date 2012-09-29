@@ -1,12 +1,8 @@
 # creature
 
+for creatures like dragons, unicorns, and ponies
 
-# usage
-
-    var big = require("big");
-    big.use("creature");
-
-## creature
+## API
 
 #### [properties](#creature-properties)
 

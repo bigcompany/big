@@ -1,12 +1,8 @@
 # stdout
 
+outputs all big events as new-line delimited JSON fragments
 
-# usage
-
-    var big = require("big");
-    big.use("stdout");
-
-## stdout
+## API
 
 #### [properties](#stdout-properties)
 

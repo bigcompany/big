@@ -1,12 +1,8 @@
 # http
 
 
-# usage
 
-    var big = require("big");
-    big.use("http");
-
-## http
+## API
 
 #### [properties](#http-properties)
 

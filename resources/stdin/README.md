@@ -1,12 +1,8 @@
 # stdin
 
 
-# usage
 
-    var big = require("big");
-    big.use("stdin");
-
-## stdin
+## API
 
 #### [properties](#stdin-properties)
 

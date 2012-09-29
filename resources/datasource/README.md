@@ -1,12 +1,8 @@
 # datasource
 
+perists resources to data storage engines
 
-# usage
-
-    var big = require("big");
-    big.use("datasource");
-
-## datasource
+## API
 
 #### [properties](#datasource-properties)
 

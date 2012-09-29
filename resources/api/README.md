@@ -1,12 +1,8 @@
 # api
 
 
-# usage
 
-    var big = require("big");
-    big.use("api");
-
-## api
+## API
 
 #### [properties](#api-properties)
 

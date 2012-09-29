@@ -1,12 +1,8 @@
 # mesh
 
 
-# usage
 
-    var big = require("big");
-    big.use("mesh");
-
-## mesh
+## API
 
 #### [properties](#mesh-properties)
 

@@ -1,12 +1,8 @@
 # node
 
+for managing nodes
 
-# usage
-
-    var big = require("big");
-    big.use("node");
-
-## node
+## API
 
 #### [properties](#node-properties)
 

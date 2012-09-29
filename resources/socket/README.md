@@ -1,12 +1,8 @@
 # socket
 
 
-# usage
 
-    var big = require("big");
-    big.use("socket");
-
-## socket
+## API
 
 #### [properties](#socket-properties)
 

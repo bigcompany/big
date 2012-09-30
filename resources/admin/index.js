@@ -20,14 +20,16 @@ function start (options, callback) {
 
   resource.http.app.get('/admin', auth, function (req, res, next) {
     var _r = _resources();
-    var str = view.index.render({
+    view.index.render({
       system: JSON.stringify(dashboard(), true, 2)
     });
+    str = view.index.present({ resources: resource.resources });
     res.end(str);
   });
 
   resource.http.app.get('/admin/resources', auth, function (req, res, next) {
-    var str = view.resources.render({ resources: JSON.stringify(_resources(), true, 2) });
+    var str = view.resources.render();
+    str = view.resources.present({ resources: resource.resources });
     res.end(str);
   });
 
@@ -39,6 +41,7 @@ function start (options, callback) {
       schema: JSON.stringify(r.schema, true, 2),
       methods: JSON.stringify(_methods(r), true, 2)
     });
+    str = view.resource.present({ methods: r.methods });
     res.end(str);
   });
 

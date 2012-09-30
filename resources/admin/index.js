@@ -53,6 +53,7 @@ function start (options, callback) {
       method: _method.unwrapped.toString(),
       schema: JSON.stringify(_method.schema, true, 2)
     });
+    str = view.method.present({ resource: _resource, methods: _resource.methods, method: _method, name: req.param('method') });
     res.end(str);
   });
 

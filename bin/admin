@@ -1,12 +1,19 @@
 var big = require('../big');
 big.use('creature', { datasource: 'fs' });
 big.use('datasource', { datasource: 'fs' });
+big.use('user', { datasource: 'fs' });
 big.use('video', { datasource: 'fs' });
+
 
 big.use('http');
 big.use('admin');
+big.use('docs');
+big.use('noc');
 big.use('replicator');
+big.use('mesh');
+
 
 big.start(function(err, server){
+  big.replicator.listen();
   console.log('big admin started on', server.address().port);
 });

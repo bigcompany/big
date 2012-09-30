@@ -41,7 +41,7 @@ function start (options, callback) {
       schema: JSON.stringify(r.schema, true, 2),
       methods: JSON.stringify(_methods(r), true, 2)
     });
-    str = view.resource.present({ methods: r.methods });
+    str = view.resource.present({ methods: r.methods, resource: r });
     res.end(str);
   });
 

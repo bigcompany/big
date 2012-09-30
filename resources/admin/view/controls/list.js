@@ -6,7 +6,7 @@ module['exports'] = function (options, callback) {
   $('.items').children().remove();
 
   Object.keys(items).forEach(function(item){
-    $('.items').append('<li><a href="/admin/resources/' + item +'">' + item + '</a></li>');
+    $('.items').append('<li><a href="' + options.root + item +'">' + item + '</a></li>');
   });
 
   return $.html();

@@ -1,10 +1,9 @@
 {
-  "name": "memory",
-  "type": null,
+  "id": "memory",
+  "type": "memory",
   "port": null,
-  "host": "localhost",
-  "uri": "",
+  "host": null,
+  "uri": null,
   "username": null,
-  "password": null,
-  "id": "memory"
+  "password": null
 }

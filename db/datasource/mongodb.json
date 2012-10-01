@@ -1,10 +1,9 @@
 {
-  "name": "mongodb",
-  "type": null,
-  "port": null,
+  "id": "mongo",
+  "type": "MongoDB",
+  "port": 27017,
   "host": "localhost",
-  "uri": "",
+  "uri": "mongodb://localhost:27017",
   "username": null,
-  "password": null,
-  "id": "mongodb"
+  "password": null
 }

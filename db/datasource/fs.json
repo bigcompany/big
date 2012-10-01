@@ -1,10 +1,9 @@
 {
-  "name": "fs",
-  "type": null,
+  "id": "fs",
+  "type": "file-system",
   "port": null,
-  "host": "localhost",
-  "uri": "",
+  "host": null,
+  "uri": null,
   "username": null,
-  "password": null,
-  "id": "fs"
+  "password": null
 }

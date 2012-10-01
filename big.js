@@ -1,5 +1,5 @@
 //
-// MIT - Marak
+//   big.js
 //
 // The code-base for Big is written as a story from top to bottom.
 //
@@ -10,26 +10,10 @@
 var Big = {};
 
 //
-// The only thing that this "barebone" Big can do is act as a multi-level event emitter
-//
-
-//
-// Require an EventEmitter package
-//
-var EventEmitter = require('eventemitter2').EventEmitter2;
-
-//
-// We'll just overwrite Big to be an EventEmitter. That's easy enough.
-//
-Big = new EventEmitter({
-  wildcard: true, // event emitter should use wildcards ( * )
-  delimiter: '::', // the delimiter used to segment namespaces
-  maxListeners: 20, // the max number of listeners that can be assigned to an event
-});
-
-//
 // That's all Big is.
+//
 // Big seems quite small right now actually.
+//
 // We will need to create a way for Big to load additional functionality...
 //
 
@@ -40,13 +24,16 @@ Big = new EventEmitter({
 //
 // Require a simple resource system
 //
-Big.resource = require('./resource');
+Big.resource = require('resource');
 
 //
 // Attach some of the resource methods to Big for convenience
 //
-Big.use = Big.resource.use;
+Big.use    = Big.resource.use;
 Big.define = Big.resource.define;
+Big.emit   = Big.resource.emit;
+Big.on     = Big.resource.on;
+Big.onAny  = Big.resource.onAny;
 
 
 //

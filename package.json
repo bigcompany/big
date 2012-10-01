@@ -9,10 +9,13 @@
     "start": "node ./bin/big"
   },
   "dependencies": {
-    "eventemitter2": "*"
+    "resource": "*"
   },
   "bin": {
-    "big": "./bin/big"
+    "big": "./bin/big",
+    "big-admin": "./bin/admin",
+    "big-mesh-tracker": "./bin/mesh-tracker",
+    "big-replicator": "./bin/replicator"
   },
   "license": "MIT"
 }

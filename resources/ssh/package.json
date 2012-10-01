@@ -1,8 +1,0 @@
-{
-  "name": "big-ssh",
-  "bin": {
-    "big-sh": "./bin/big-sh",
-    "big-help": "./bin/big-help"
-  },
-  "version": "0.0.0"
-}

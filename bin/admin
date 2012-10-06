@@ -4,7 +4,7 @@ big.use('datasource', { datasource: 'fs' });
 big.use('creature', { datasource: 'fs' });
 big.use('user', { datasource: 'fs' });
 big.use('video', { datasource: 'fs' });
-big.use('tag', { datasource: 'fs' });
+//big.use('tag', { datasource: 'fs' });
 
 big.use('node', { datasource: 'fs' });
 
@@ -15,9 +15,8 @@ big.use('replicator');
 big.use('mesh');
 
 big.admin.listen(function(err, server){
-  big.mesh.connect({ host: "biginternetcompany.net", port: 80 });
-  big.mesh.connect({ host: "localhost", port: 8889 });
-
+  //big.mesh.connect({ host: "biginternetcompany.net", port: 8888 });
+  //big.mesh.connect({ host: "localhost", port: 8889 });
   big.mesh.listen();
   big.replicator.listen();
   //console.log('big admin started on', server.address().port);

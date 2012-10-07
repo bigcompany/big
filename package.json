@@ -8,9 +8,6 @@
   "scripts": {
     "start": "node ./bin/big"
   },
-  "dependencies": {
-    "resource": "*"
-  },
   "bin": {
     "big": "./bin/big",
     "big-admin": "./bin/admin",

@@ -1,6 +1,7 @@
 {
   "id": "couch",
-  "type": "CouchDB",
+  "status": "error",
+  "type": "couch",
   "port": 5984,
   "host": "localhost",
   "uri": "http://localhost:5984/",

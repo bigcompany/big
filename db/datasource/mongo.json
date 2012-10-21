@@ -1,5 +1,6 @@
 {
   "id": "mongo",
+  "status": "error",
   "type": "MongoDB",
   "port": 27017,
   "host": "localhost",

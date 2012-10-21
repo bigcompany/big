@@ -1,23 +1,45 @@
+#!/usr/bin/env node
+
 var big = require('../big');
+
+//
+// Log all evens to console
+//
+big.resource.onAny(function(data){
+  console.log('event:', this.event);
+});
+
+big.use('account', { datasource: 'fs' });
+big.use('permissions', { datasource: 'fs' });
 
 big.use('datasource', { datasource: 'fs' });
 big.use('creature', { datasource: 'fs' });
-big.use('user', { datasource: 'fs' });
-big.use('video', { datasource: 'fs' });
-//big.use('tag', { datasource: 'fs' });
-
 big.use('node', { datasource: 'fs' });
+big.use('hook', { datasource: 'fs' });
+big.use('replicator');
+big.use('replication', { datasource: 'fs' });
 
+big.use('video', { datasource: 'couch' });
+big.use('tag', { datasource: 'couch' });
+
+big.use('email');
 big.use('http');
 big.use('admin');
 big.use('docs');
-big.use('replicator');
 big.use('mesh');
 
-big.admin.listen(function(err, server){
-  //big.mesh.connect({ host: "biginternetcompany.net", port: 8888 });
-  //big.mesh.connect({ host: "localhost", port: 8889 });
-  big.mesh.listen();
-  big.replicator.listen();
-  //console.log('big admin started on', server.address().port);
+big.hook.start(function(){
+  big.http.listen(function(err, server) {
+    big.admin.listen(function(err, server) {
+      // TODO: make server.address() work
+      // console.log('big admin started on http://' + server.address().address + ":" + server.address().port);
+      big.mesh.uplink({ host: "biginternetcompany.net", port: 8888 }, function(err, result) {
+        if(err) {
+          console.log('error: could not connect to mesh');
+        }
+      });
+      big.mesh.listen();
+      big.replicator.listen();
+    });
+  });
 });

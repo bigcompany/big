@@ -1,16 +1,17 @@
 #!/usr/bin/env node
+
 var big = require('../big');
 
 big.use('datasource', { datasource: 'fs' });
 
 big.use('creature', { datasource: 'fs' });
-big.use('user', { datasource: 'fs' });
+big.use('account', { datasource: 'fs' });
 
 big.use('cli');
 big.use('docs');
 big.use('mesh');
 big.use('replicator');
 big.use('system');
-big.use('view');
+//big.use('view');
 
-big.start();
+big.cli.start();

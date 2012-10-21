@@ -10,7 +10,6 @@ big.resource.onAny(function(data){
 });
 
 big.use('account', { datasource: 'fs' });
-big.use('permissions', { datasource: 'fs' });
 
 big.use('datasource', { datasource: 'fs' });
 big.use('creature', { datasource: 'fs' });

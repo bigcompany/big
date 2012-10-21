@@ -1,5 +1,6 @@
 {
   "id": "fs",
+  "status": "online",
   "type": "file-system",
   "port": null,
   "host": null,

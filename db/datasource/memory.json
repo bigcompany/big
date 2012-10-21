@@ -1,5 +1,6 @@
 {
   "id": "memory",
+  "status": "online",
   "type": "memory",
   "port": null,
   "host": null,

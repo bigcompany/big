@@ -1,0 +1,5 @@
+{
+  "id": "ac1223ba-8c3e-408d-a79f-82318674c147",
+  "if": "account::create",
+  "then": "email::send"
+}

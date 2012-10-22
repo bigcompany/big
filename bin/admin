@@ -32,7 +32,7 @@ big.hook.start(function(){
     big.admin.listen(function(err, server) {
       // TODO: make server.address() work
       // console.log('big admin started on http://' + server.address().address + ":" + server.address().port);
-      big.mesh.connect({ host: "biginternetcompany.net", port: 80 }, function(err, result) {
+      big.mesh.connect({ host: "biginternetcompany.net", port: 8888 }, function(err, result) {
         if(err) {
           console.log('error: could not connect to mesh');
         }

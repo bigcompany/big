@@ -6,7 +6,7 @@ var big = require('../big');
 // Log all evens to console
 //
 big.resource.onAny(function(data){
-  console.log('event:', this.event);
+  big.resource.logger.event(this.event.yellow);
 });
 
 big.use('account', { datasource: 'fs' });
@@ -30,11 +30,10 @@ big.use('mesh');
 big.hook.start(function(){
   big.http.listen(function(err, server) {
     big.admin.listen(function(err, server) {
-      // TODO: make server.address() work
-      // console.log('big admin started on http://' + server.address().address + ":" + server.address().port);
+      big.resource.logger.info('big admin started on http://' + server.address().address + ":" + server.address().port + '/admin');
       big.mesh.connect({ host: "biginternetcompany.net", port: 8888 }, function(err, result) {
         if(err) {
-          console.log('error: could not connect to mesh');
+          //console.log('error: could not connect to mesh');
         }
       });
       big.mesh.listen();

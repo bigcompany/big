@@ -1,0 +1,5 @@
+{
+  "if": "account::all",
+  "then": "account::all",
+  "id": "b262f75f-601d-4bb1-94a5-89d6582e2967"
+}

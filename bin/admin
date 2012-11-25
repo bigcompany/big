@@ -23,6 +23,9 @@ big.use('tag', { datasource: 'couch' });
 
 big.use('email');
 big.use('http');
+
+// big.use('virtualhost', { datasource: 'fs' });
+
 big.use('admin');
 big.use('docs');
 big.use('mesh');

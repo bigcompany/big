@@ -1,7 +1,7 @@
 {
-  "id": "304f6695-333b-4adb-9a13-71f18609058d",
+  "id": "admin",
   "email": "admin@marak.com",
-  "password": "asd",
-  "status": "new",
+  "password": "admin",
+  "status": "active",
   "token": ""
 }

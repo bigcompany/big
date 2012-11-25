@@ -1,7 +1,7 @@
 {
-  "id": "biginternetcompany.net:8888",
+  "id": "localhost:8888",
   "port": 8888,
-  "host": "biginternetcompany.net",
+  "host": "localhost",
   "name": null,
   "events": null,
   "username": "root",
@@ -9,5 +9,5 @@
   "status": "disconnected",
   "password": null,
   "system": null,
-  "lastSeen": "Sun Nov 04 2012 17:36:28 GMT-0800 (PST)"
+  "lastSeen": "Tue Oct 23 2012 13:03:47 GMT-0700 (PDT)"
 }

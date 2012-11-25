@@ -1,0 +1,14 @@
+var big = require('../big');
+
+//
+// Log all evens to console
+//
+big.resource.onAny(function(data){
+  big.resource.logger.event(this.event.yellow);
+});
+
+big.use('admin');
+
+big.admin.listen(function(err, result){
+    console.log(err, result);
+});

@@ -1,42 +1,48 @@
 //
 //   big.js
 //
-// The code-base for Big is written as a story from top to bottom.
+// The code-base for big is written as a story from top to bottom.
 //
 
 //
-// This is Big. Big is a singleton. There is only one Big in every application
+// This is big. big is a singleton. There is only one big in every application.
 //
-var Big = {};
+var big = {}; // Create big as an object.
 
 //
-// That's all Big is.
+// That's all big is.
 //
-// Big seems quite small right now actually.
+// big seems quite small right now actually...
 //
-// We will need to create a way for Big to load additional functionality...
-//
-
-//
-// In order to extend big and add new functionality, we'll implement a Resource system ( as in Resource-View-Presenter )
+// We will need to create a way to extend big with additional functionality.
+// In order to do so, we'll implement a Resource system
+// ( as in Resource-View-Presenter ).
 //
 
 //
-// Require a simple resource system
+// Require the node.js resource module.
 //
-Big.resource = require('resource');
+big.resource = require('resource');
 
 //
-// Attach some of the resource methods to Big for convenience
+// For convenience, hoist some of the resource methods onto big.
 //
-Big.use    = Big.resource.use;
-Big.define = Big.resource.define;
-Big.emit   = Big.resource.emit;
-Big.on     = Big.resource.on;
-Big.onAny  = Big.resource.onAny;
-
+big.use    = big.resource.use; // For using/loading resources
+big.define = big.resource.define; // For defining new resources
 
 //
-// That's it for now! We will export Big into the module's export scope and be done with it!
+// The resource library utilizes EventEmitter2.
+// See: https://github.com/hij1nx/eventemitter2
+big.emit   = big.resource.emit; // For emitting namespaced events
+big.on     = big.resource.on; // For listening for namespaced events
+big.onAny  = big.resource.onAny; // For listening for any events
+
 //
-module['exports'] = Big;
+// Export big into the module's export scope so it may be accessed
+// with `var big = require('big')`.
+//
+module['exports'] = big;
+
+//
+// That's it for now!
+//

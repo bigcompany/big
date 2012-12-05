@@ -4,14 +4,13 @@ var big = require('../big');
 
 big.use('datasource', { datasource: 'fs' });
 
-big.use('creature', { datasource: 'fs' });
-big.use('account', { datasource: 'fs' });
-
 big.use('cli');
-big.use('docs');
-big.use('mesh');
-big.use('replicator');
-big.use('system');
-//big.use('view');
+big.use('scaffold');
+
+
+//big.cli.router.on('new', big.scaffold.new);
 
 big.cli.start();
+big.cli.route();
+
+//console.log('bbb', big.cli.router);

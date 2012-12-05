@@ -1,16 +1,17 @@
 {
   "name": "big",
-  "version": "0.0.0",
-  "description": "Big Company's Big Framework",
+  "version": "0.0.1",
   "main": "big.js",
-  "repository": "https://github.com/bigcompany/big.git",
-  "author": "Marak",
   "scripts": {
     "start": "node ./bin/big"
+  },
+  "dependencies": {
+    "resource": "0.2.0"
   },
   "bin": {
     "big": "./bin/big",
     "big-admin": "./bin/admin",
+    "big-slim-admin": "./bin/slim-admin",
     "big-mesh-tracker": "./bin/mesh-tracker",
     "big-replicator": "./bin/replicator"
   },

@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var big = require('../big');
+
+var irc = big.use('irc');
+
+//console.log(irc);
+
+irc.connect(function (err, _) {
+  console.log(err);
+  console.log(_);
+});

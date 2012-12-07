@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var big = require('../big');
 big.use('docs');
 big.docs.build();

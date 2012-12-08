@@ -2,11 +2,19 @@
 
 var big = require('../big');
 
+big.use('hook', { datasource: 'fs' });
+
 var irc = big.use('irc');
 
-//console.log(irc);
+big.resource.onAny(function(data){
+  big.resource.logger.event(this.event.yellow);
+});
 
-irc.connect(function (err, _) {
-  console.log(err);
-  console.log(_);
+big.hook.start(function (err) {
+  irc.connect({
+    channel: '#big'
+  }, function (err, _) {
+    console.log(err);
+    console.log(_);
+  });
 });

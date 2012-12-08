@@ -1,0 +1,5 @@
+{
+  "id": "irc-start",
+  "if": "irc::connect",
+  "then": "irc::join"
+}

@@ -18,5 +18,6 @@ big.hook.start(function (err) {
       throw err;
     }
     big.resource.logger.put(options);
+  }, function (err, _) {
   });
 });

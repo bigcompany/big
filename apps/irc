@@ -13,8 +13,10 @@ big.resource.onAny(function(data){
 big.hook.start(function (err) {
   irc.connect({
     channel: '#big'
-  }, function (err, _) {
-    console.log(err);
-    console.log(_);
+  }, function (err, options) {
+    if (err) {
+      throw err;
+    }
+    big.resource.logger.put(options);
   });
 });

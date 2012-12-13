@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var big = require('../big');
+big.use('repl');
+big.cli.start();

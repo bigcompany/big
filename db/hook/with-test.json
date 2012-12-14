@@ -1,0 +1,8 @@
+{
+  "id": "with-test",
+  "if": "creature::get",
+  "then": "logger::log",
+  "with": {
+    "foo": "bar"
+  }
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+var big = require('../big');
+
+big.use('hook', { datasource: 'fs' });
+var twitter = big.use('twitter');
+big.use('repl');
+
+big.resource.onAny(function(data){
+  big.resource.logger.event(this.event.yellow);
+});
+
+var log = big.resource.logger;
+
+big.hook.start(function (err) {
+  twitter.connect( {
+    "consumer_key": "yDOOeyO09N8HpihY7WaxA",
+    "consumer_secret": "7YSjpLyAobWwCMyqG4aZRKR8S1CoRkAtGP1uA8",
+    "access_token_key": "704303294-YHK2MdwcEHrEh0U2D17hCNryg83fz3a21UqHGxPf",
+    "access_token_secret": "49k8SGK53Spiozmfxr0E5tq1NzClahCRGojgL5d8"
+  }, function (err, options) {
+    if (err) {
+      throw err;
+    }
+    log.log(options);
+    twitter.send({
+      message: 'hello friend'
+    }, function (err, result) {
+      if (err) {
+        throw err;
+      }
+      console.log(result);
+    });
+  });
+});

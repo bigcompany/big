@@ -3,12 +3,11 @@
 var big = require('../big');
 
 big.use('hook', { datasource: 'fs' });
+big.use('repl');
 
 var irc = big.use('irc');
 
-big.resource.onAny(function(data){
-  big.resource.logger.event(this.event.yellow);
-});
+big.repl.start();
 
 big.hook.start(function (err) {
   irc.connect({

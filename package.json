@@ -9,11 +9,7 @@
     "resource": "0.2.0"
   },
   "bin": {
-    "big": "./bin/big",
-    "big-admin": "./bin/admin",
-    "big-slim-admin": "./bin/slim-admin",
-    "big-mesh-tracker": "./bin/mesh-tracker",
-    "big-replicator": "./bin/replicator"
+    "big": "./bin/big"
   },
   "license": "MIT"
 }

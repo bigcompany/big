@@ -6,7 +6,7 @@
     "start": "node ./bin/big"
   },
   "dependencies": {
-    "resource": "0.2.0"
+    "resource": "0.2.x"
   },
   "bin": {
     "big": "./bin/big"

@@ -3,20 +3,20 @@
 ## Installation
 
 ```bash
-  npm install big
+npm install big
 ```
 
 ## Quick Start
 
 ```bash
-  big admin start
+big admin start
 ```
 
 ## Developer Start
 
 ```js
-  var big = require('big');
-  big.use('creature');
-  big.use('admin');
-  big.admin.start();
+var big = require('big');
+big.use('creature');
+big.use('admin');
+big.admin.start();
 ```

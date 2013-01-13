@@ -5,12 +5,7 @@ var big = require('../big');
 big.use('datasource', { datasource: 'fs' });
 
 big.use('cli');
-big.use('scaffold');
 
-
-//big.cli.router.on('new', big.scaffold.new);
-
-big.cli.start();
-big.cli.route();
-
-//console.log('bbb', big.cli.router);
+big.cli.start(function(){
+  big.cli.route();
+});

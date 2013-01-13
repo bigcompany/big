@@ -20,3 +20,5 @@ big.use('creature');
 big.use('admin');
 big.admin.start();
 ```
+
+*Starts a http web admin server on http://localhost:8888/*

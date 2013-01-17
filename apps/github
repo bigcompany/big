@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
 var big = require('../big');
-
 big.use('github');
-
-big.github.userActivity({ user: "marak" }, function(err, result){
-  console.log(err, result);
+big.logger.warn('getting activity, this may take a moment...');
+big.github.activity({ user: "marak" }, function (err, result){
+  if (err) {
+    throw err;
+  }
+  big.logger.put(result);
 });

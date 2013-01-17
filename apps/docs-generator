@@ -2,4 +2,8 @@
 
 var big = require('../big');
 big.use('docs');
+
+//
+// Builds README files for all resources
+//
 big.docs.build();

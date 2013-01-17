@@ -18,9 +18,6 @@ big.use('hook', { datasource: 'fs' });
 big.use('replicator');
 big.use('replication', { datasource: 'fs' });
 
-big.use('video', { datasource: 'couch' });
-big.use('tag', { datasource: 'couch' });
-
 big.use('email');
 big.use('http');
 

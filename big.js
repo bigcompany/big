@@ -1,5 +1,5 @@
 //
-//   big.js
+//   big.js - Application Framework
 //
 // The code-base for big is written as a story from top to bottom.
 //
@@ -33,9 +33,12 @@ big.define = big.resource.define; // For defining new resources
 //
 // The resource library utilizes EventEmitter2.
 // See: https://github.com/hij1nx/eventemitter2
+
 big.emit   = big.resource.emit; // For emitting namespaced events
 big.on     = big.resource.on; // For listening for namespaced events
 big.onAny  = big.resource.onAny; // For listening for any events
+
+big.logger = big.resource.logger;
 
 //
 // Export big into the module's export scope so it may be accessed
@@ -44,5 +47,5 @@ big.onAny  = big.resource.onAny; // For listening for any events
 module['exports'] = big;
 
 //
-// That's it for now!
+// That's it for now! You'll notice Big is actually quite small.
 //

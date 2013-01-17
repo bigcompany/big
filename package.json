@@ -1,12 +1,13 @@
 {
   "name": "big",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "main": "big.js",
   "scripts": {
     "start": "node ./bin/big"
   },
   "dependencies": {
-    "resource": "0.2.x"
+    "resource": "0.3.x",
+    "resources": "0.3.x"
   },
   "bin": {
     "big": "./bin/big"

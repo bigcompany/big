@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-var big = require('../big');
-
-big.use('datasource', { datasource: 'fs' });
+var big = require('../big'),
+    resources = require('resources');
 
 big.use('cli');
 

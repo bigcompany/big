@@ -1,18 +1,12 @@
 # Big
 
-## Installation
+## Developer Start
+
+### Installation
 
 ```bash
 npm install big
 ```
-
-## Quick Start
-
-```bash
-big admin start
-```
-
-## Developer Start
 
 ```js
 var big = require('big');

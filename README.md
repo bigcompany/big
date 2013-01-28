@@ -2,10 +2,6 @@
 
 ## Developer Start
 
-user / password for administration can be set in resources/admin/index.js
-
-it defaults to admin / admin
-
 ### Installation
 
 ```bash
@@ -22,6 +18,12 @@ big.admin.start(function(err, server) {
 ```
 
 *Starts a http web admin server on http://localhost:8888/*
+
+### Admin
+
+user / password for administration can be set in resources/admin/index.js
+
+it defaults to admin / admin
 
 ## Resource Development
 

@@ -2,6 +2,10 @@
 
 ## Developer Start
 
+user / password for administration can be set in resources/admin/index.js
+
+it defaults to admin / admin
+
 ### Installation
 
 ```bash

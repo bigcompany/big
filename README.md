@@ -13,17 +13,12 @@ var big = require('big');
 big.use('creature');
 big.use('admin');
 big.admin.start(function(err, server) {
-  big.logger.info('admin server started on http://0.0.0.0:8888/');
+  big.logger.info('admin server started on http://0.0.0.0:8888/admin');
+  big.logger.help('username and password is: admin');
 });
 ```
 
-*Starts a http web admin server on http://localhost:8888/*
-
-### Admin
-
-user / password for administration can be set in resources/admin/index.js
-
-it defaults to admin / admin
+*Starts a http web admin server on http://admin:admin@localhost:8888/admin*
 
 ## Resource Development
 

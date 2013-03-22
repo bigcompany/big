@@ -2,11 +2,23 @@
 
 ## Developer Start
 
-### Installation
+### Install Big Globally
+
+In a terminal, run:
+
+```bash
+<sudo> npm install big -g
+```
+
+### Install as a Library in an Application
+
+Inside a project folder with a `package.json`, run:
 
 ```bash
 npm install big
 ```
+
+Add the following to the entry point of your application:
 
 ```js
 var big = require('big');

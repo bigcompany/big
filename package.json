@@ -5,13 +5,16 @@
   "scripts": {
     "start": "node ./bin/big"
   },
+  "devDependencies": {
+    "resource": "0.3.x",
+    "resources": "0.3.x"
+  },
   "peerDependencies": {
     "resource": "0.3.x",
     "resources": "0.3.x"
   },
-  "devDependencies": {
-    "resource": "0.3.x",
-    "resources": "0.3.x"
+  "engines": {
+    "npm": "~1.2.10"
   },
   "bin": {
     "big": "./bin/big"

@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var big = require('../big');
+
+//
+// Log all evens to console
+//
+big.resource.onAny(function(data){
+  big.resource.logger.event(this.event.yellow);
+});
+
+big.use('creature', { datasource: 'fs' });
+big.use('http');
+big.use('api');
+
+big.http.listen(function(){
+  big.api.listen(function(){
+    big.logger.info('api server started!');
+  });
+});

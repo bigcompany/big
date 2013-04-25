@@ -1,6 +1,6 @@
 {
   "name": "big",
-  "version": "0.3.1",
+  "version": "0.3.8",
   "main": "big.js",
   "scripts": {
     "start": "node ./bin/big"

@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var big = require('../big');
+
+//
+// Log all evens to console
+//
+big.resource.onAny(function(data){
+  big.resource.logger.event(this.event.yellow);
+});
+
+big.use('account', { datasource: 'fs' });
+
+big.use('datasource', { datasource: 'fs' });
+big.use('creature', { datasource: 'fs' });
+big.use('node', { datasource: 'fs' });
+big.use('hook', { datasource: 'fs' });
+big.use('replicator');
+big.use('replication', { datasource: 'fs' });
+
+big.use('email');
+big.use('http');
+
+
+// big.use('virtualhost', { datasource: 'fs' });
+
+big.use('admin');
+big.use('docs');
+big.use('mesh');
+
+big.hook.start(function(){
+  big.http.listen(function(err, server) {
+    big.admin.listen(function(err, server) {
+      big.resource.logger.info('big admin started on http://' + server.address().address + ":" + server.address().port + '/admin');
+      big.mesh.connect({ host: "biginternetcompany.net", port: 8888 }, function(err, result) {
+        if(err) {
+          //console.log('error: could not connect to mesh');
+        }
+      });
+      big.mesh.listen();
+      big.replicator.listen();
+    });
+  });
+});

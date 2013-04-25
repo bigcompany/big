@@ -2,7 +2,15 @@
 
 var big = require('../big');
 
+//
+// Use the web admin resource
+//
 big.use('admin');
+
+//
+// Use the creature resource for demonstration purposes
+//
+big.use('creature', { datasource: "fs"});
 
 big.admin.start(function (err, server) {
   var address = server.address();

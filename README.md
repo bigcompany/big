@@ -16,6 +16,9 @@ Inside a project folder with a `package.json`, run:
 
 ```bash
 npm install big
+npm install resource
+npm install resources
+
 ```
 
 Add the following to the entry point of your application:

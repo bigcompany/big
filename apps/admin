@@ -8,11 +8,14 @@ var big = require('../big');
 big.use('admin');
 
 //
-// Use the creature resource for demonstration purposes
+// Use the creature and account resources for demonstration purposes
 //
+big.use('account', { datasource: "fs"});
 big.use('creature', { datasource: "fs"});
+
 
 big.admin.start(function (err, server) {
   var address = server.address();
-  big.logger.info('admin server started on http://' + address.address + ":" + address.port)
+  big.logger.info('admin server started on http://' + address.address + ":" + address.port + "/admin")
+  big.logger.help('username and password are admin');
 });

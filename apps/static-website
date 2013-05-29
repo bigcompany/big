@@ -2,12 +2,9 @@
 
 var big = require('../big');
 
-
 big.use('http');
-// don't use virtualhost for now
-// big.use('virtualhost', { datasource: 'fs' });
 
 big.http.listen({ root: './' }, function(err, server) {
   var address = server.address();
-  console.log('static server started on http://' + address.address + ":" + address.port)
+  big.logger.info('static server started on http://' + address.address + ":" + address.port)
 });

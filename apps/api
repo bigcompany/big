@@ -3,18 +3,18 @@
 var big = require('../big');
 
 //
-// Log all evens to console
+// Log all events to console
 //
-big.resource.onAny(function(data){
-  big.resource.logger.event(this.event.yellow);
+big.onAny(function(data){
+  big.logger.event(this.event.yellow);
 });
 
+big.use('resource', { datasource: 'fs' });
 big.use('creature', { datasource: 'fs' });
 big.use('http');
 big.use('api');
 
-big.http.listen(function(){
-  big.api.listen(function(){
-    big.logger.info('api server started!');
-  });
+big.http.start(function(err, server){
+  var address = server.address();
+  big.logger.info('api server started on http://' + address.address + ":" + address.port + "/api")
 });

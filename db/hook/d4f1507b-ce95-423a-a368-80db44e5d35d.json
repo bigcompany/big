@@ -1,5 +1,0 @@
-{
-  "id": "d4f1507b-ce95-423a-a368-80db44e5d35d",
-  "if": "replicator::push",
-  "then": "replication::create"
-}

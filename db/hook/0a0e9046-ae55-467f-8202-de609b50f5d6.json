@@ -1,5 +1,0 @@
-{
-  "id": "0a0e9046-ae55-467f-8202-de609b50f5d6",
-  "if": "replicator::pull",
-  "then": "replicator::checkout"
-}

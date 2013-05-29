@@ -1,5 +1,7 @@
 # Big
 
+Big is a next generation application micro-framework which solves the domain problem of building web applications. Unlike other web frameworks, Big utilizes a Resource-View-Presenter pattern. This new application development pattern allows for the rapid development of robust applications with minimal effort. Big applications are defined by a collection of resources which can then be reflected across a variety of well defined interfaces.
+
 ## Developer Start
 
 ### Install Big Globally
@@ -7,33 +9,10 @@
 In a terminal, run:
 
 ```bash
-<sudo> npm install big -g
+npm install big -g
 ```
 
-### Install as a Library in an Application
-
-Inside a project folder with a `package.json`, run:
-
-```bash
-npm install big
-npm install resource
-npm install resources
-
-```
-
-Add the following to the entry point of your application:
-
-```js
-var big = require('big');
-big.use('creature');
-big.use('admin');
-big.admin.start(function(err, server) {
-  big.logger.info('admin server started on http://0.0.0.0:8888/admin');
-  big.logger.help('username and password is: admin');
-});
-```
-
-*Starts a http web admin server on http://admin:admin@localhost:8888/admin*
+*On some systems you may have to `npm` with `sudo`*
 
 ## Resource Development
 

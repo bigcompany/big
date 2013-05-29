@@ -1,5 +1,0 @@
-{
-  "id": "23df43d0-c8d2-42f0-8144-1c16785b4781",
-  "if": "replicator::pull",
-  "then": "replication::create"
-}

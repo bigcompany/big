@@ -1,6 +1,6 @@
 # Big
 
-Big is a next generation application micro-framework which solves the domain problem of building web applications. Unlike other web frameworks, Big utilizes a Resource-View-Presenter pattern. This new application development pattern allows for the rapid development of robust applications with minimal effort. Big applications are defined by a collection of resources which can then be reflected across a variety of well defined interfaces.
+Big is a next generation application micro-framework which solves the domain problem of building web applications. Unlike other web frameworks, Big utilizes a Resource-View-Presenter pattern. This new application development pattern allows for the rapid development of robust applications with minimal effort. Big applications are defined by a collection of composable resources which can then be reflected across a variety of well defined interfaces.
 
 ## Developer Start
 

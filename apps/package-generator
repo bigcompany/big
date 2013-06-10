@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+var big = require('../big'),
+    resources = require('resources');
+
+big.use('package');
+
+for (var r in big.resources) {
+
+  //
+  // ignore 'logger' resource for now 
+  // see: https://github.com/bigcompany/resource/issues/16
+  //
+  if (r === 'logger') {
+    continue;
+  }
+
+  //
+  // Generate an npm packge.json manifest
+  // https://github.com/isaacs/npm/blob/master/doc/cli/json.md
+  //
+  var pkg = big.package.npm(big.resources[r]);
+
+  //
+  // Write the package
+  //
+  var fs = require('fs'),
+  path = require('path'),
+  packagePath = path.normalize(require.resolve('resources') + '/../' + r + '/package.json');
+
+  //
+  // Write the package
+  //
+  fs.writeFileSync(packagePath, JSON.stringify(pkg, true, 4));
+
+}

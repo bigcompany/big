@@ -25,6 +25,11 @@ var big = {}; // Create big as an object.
 big.resource = require('resource');
 
 //
+// Map resources to the top-level of big for convenience
+//
+big.resources = big.resource.resources;
+
+//
 // For convenience, hoist some of the resource methods onto big.
 //
 big.use    = big.resource.use; // For using/loading resources

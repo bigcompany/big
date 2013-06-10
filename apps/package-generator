@@ -32,5 +32,6 @@ for (var r in big.resources) {
   // Write the package
   //
   fs.writeFileSync(packagePath, JSON.stringify(pkg, true, 2));
+  big.logger.info('wrote ' + packagePath)
 
 }

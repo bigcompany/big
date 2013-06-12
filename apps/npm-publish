@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+var big = require('../big'),
+    resources = require('resources');
+
+big.use('npm');
+
+//
+// Publishes all packages to npm
+//
+
+var keys = Object.keys(resources.resources);
+
+function publish () {
+  if (keys.length > 0) {
+    var r = keys.pop(),
+        path = './resources/' + r;
+    big.npm.publish(path, function (err, result) {
+      publish();
+    });
+  }
+}
+
+publish();

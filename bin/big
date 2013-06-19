@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-var big = require('../big'),
+var resource = require('resource'),
     resources = require('resources'),
-    logger = big.logger,
-    cli = big.use('cli');
+    logger = resource.logger;
 
 logger.help('welcome to big');
 
-cli.start(function(err, router){
+resource.cli.start(function (err, router) {
   router.route();
 });

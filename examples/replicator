@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+var resource = require('resource');
+
+resource.use('http');
+resource.use('replicator');
+
+resource.http.start(function(err, server){
+  resource.replicator.start(function(err, server){
+    if (err) {
+      throw err;
+    }
+    console.log('replicator service listening on port ' + server.address().port);
+  });
+});

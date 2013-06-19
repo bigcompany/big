@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+var resource = require('resource');
+
+//
+// Log all events to console
+//
+resource.onAny(function(data){
+  resource.logger.event(this.event.yellow);
+});
+
+resource.use('creature', { datasource: 'fs' });
+resource.use('http');
+resource.use('api');
+
+resource.http.start(function(err, server){
+  var address = server.address();
+  resource.logger.info('api server started on http://' + address.address + ":" + address.port + "/api")
+});

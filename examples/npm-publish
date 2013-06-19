@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var big = require('../big'),
+var resource = require('resource'),
     resources = require('resources');
 
-big.use('npm');
+resource.use('npm');
 
 //
 // Publishes all packages to npm
@@ -15,7 +15,7 @@ function publish () {
   if (keys.length > 0) {
     var r = keys.pop(),
         path = './resources/' + r;
-    big.npm.publish(path, function (err, result) {
+    resource.npm.publish(path, function (err, result) {
       publish();
     });
   }

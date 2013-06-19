@@ -1,9 +1,0 @@
-#!/usr/bin/env node
-
-var big = require('../big');
-big.use('package');
-
-//
-// Builds packages for all resources
-//
-big.package.build();

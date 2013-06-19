@@ -1,6 +1,6 @@
-var big = require('../../big');
+var resource = require('resource');
 
-var twitter = big.use('twitter');
+var twitter = resource.use('twitter');
 
 //
 // Create an array of tweets
@@ -14,10 +14,10 @@ var tweets = [
 //
 // Every 10 seconds, fire off a new tweet
 //
-big.logger.info('starting twitter bot...first tweet will fire in 10 seconds')
+resource.logger.info('starting twitter bot...first tweet will fire in 10 seconds')
 setInterval(function(){
   var message = tweets.shift();
-  big.logger.info('pick and send tweet', message);
+  resource.logger.info('pick and send tweet', message);
   twitter.connect({
     "consumer_key": "",
     "consumer_secret": "",

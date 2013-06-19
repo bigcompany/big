@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-var big = require('../big'),
-    twitter = big.use('twitter');
+var resource = require('resource'),
+    twitter = resource.use('twitter');
 
-big.resource.onAny(function(data){
-  big.resource.logger.event(this.event.yellow);
+resource.resource.onAny(function(data){
+  resource.resource.logger.event(this.event.yellow);
 });
 
-var log = big.resource.logger;
+var log = resource.resource.logger;
 
 twitter.connect( {
   "consumer_key": "",

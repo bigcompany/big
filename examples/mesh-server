@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var big = require('../big'),
-    mesh = big.use('mesh');
+var resource = require('resource'),
+    mesh = resource.use('mesh');
 
 mesh.listen(function(){
 

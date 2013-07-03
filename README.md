@@ -64,23 +64,6 @@ Big has support to reflect resources across:
 
 Customization of the default reflection logic is always available, and simple. 
 
-
-## Installation
-
-In a terminal, run:
-
-```bash
-npm install big -g
-```
-
-After `big` is installed run:
-
-```bash
-big
-```
-
-*On some systems you may have to `npm` or `big` with `sudo`*
-
 ## Example Apps
 
 [https://github.com/bigcompany/big/tree/master/examples](https://github.com/bigcompany/big/tree/master/examples)

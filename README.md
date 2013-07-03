@@ -1,11 +1,13 @@
 # Big
 
-Big is a next generation application zero-framework which solves the domain problem of building web applications. 
+Big is a next generation application "framework" which solves the domain problem of building applications for the web.
 
  - No more writing interface code
  - No more writing API boilerplate
  - No more fishing on `npm` for decent quality modules
  - No more glue
+
+Big allows you to focus on **business logic**.
 
 ## Big itself is zero lines long. 
 

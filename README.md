@@ -33,19 +33,18 @@ Big ships with support for over 50 of the most popular NPM modules. We have hand
 All of the following methods will work. Any missing arguments data is intelligently filled in with defaults.
 
 ``` js
-
     var message = "hello there";
+
     twitter.send(message, cb);
     sms.send(message, cb);
     email.send(message, cb);
     irc.send(message, cb);
     mesh.send(message, cb);
-
 ```
 
 ## Developer Friendly
 
-Confused? Lost? Try a `console.log`. 
+Confused? Lost? Try a `console.log`!
 
 Big is designed to be highly introspectable. Resources are simple structures that can be easily logged to the console. It's trivial to start iterating through a resource's schema and metaprogramming a new interface.
 
@@ -64,7 +63,7 @@ Big has support to reflect resources across:
 
 [and many more...](http://github.com/bigcompany/resources/)
 
-Customization of the default reflection logic is always available, and simple. 
+Customization of the reflection logic is always possible and simple. If a use-case not covered by the reflected interface is required, a simple lower-level API is always available.
 
 ## Example Apps
 

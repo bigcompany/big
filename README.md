@@ -21,7 +21,7 @@ Big provides a collection of curated [resources](http://github.com/bigcompany/re
 
 ## A curated API across npm modules
 
-Big ships with support for over 50 of the most popular NPM modules. We have hand picked ( and tested ) each of these modules and created a unified API to allow for rapid application development.
+Big ships with support for [over 50 of the most popular NPM modules](https://github.com/bigcompany/resources). We have hand picked ( and tested ) each of these modules and created a unified API to allow for rapid application development.
 
 ### A unified approach 
 

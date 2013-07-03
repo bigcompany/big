@@ -25,7 +25,7 @@ Big ships with support for over 50 of the most popular NPM modules. We have hand
 
 
  - Unified configuration of npm modules
- - Unified API across npm modules ( `start` / `stop` / `connect` / `disconnect` / `send` / `recieve` )
+ - Unified API across npm modules ( `start` / `stop` / `connect` / `disconnect` / etc.. )
  - Unified method signatures
 
 All of the following methods will work. Any missing arguments data is intelligently filled in with defaults.
@@ -41,8 +41,16 @@ All of the following methods will work. Any missing arguments data is intelligen
 
 ```
 
+## Developer Friendly
+
+Confused? Lost? Try a `console.log`. 
+
+Big is designed to be highly introspectable. Resources are simple structures that can be easily logged to the console. It's trivial to start iterating through a resource's schema and metaprogramming a new interface.
+
 
 ## Reflection across multiple interfaces
+
+Big has support to reflect resources across:
 
  - REST
  - Socket
@@ -53,6 +61,8 @@ All of the following methods will work. Any missing arguments data is intelligen
  - Mesh
 
 [and many more...](http://github.com/bigcompany/resources/)
+
+Customization of the default reflection logic is always available, and simple. 
 
 
 ## Installation

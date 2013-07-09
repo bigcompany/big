@@ -14,8 +14,8 @@ var keys = Object.keys(resources.resources);
 function publish () {
   if (keys.length > 0) {
     var r = keys.pop(),
-        path = './resources/' + r;
-    resource.npm.publish(path, function (err, result) {
+        _path = require('path').resolve(require.resolve('resources') + '/../' + r);
+    resource.npm.publish(_path, function (err, result) {
       publish();
     });
   }

@@ -4,6 +4,10 @@
   "scripts": {
     "start": "node ./bin/big"
   },
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/bigcompany/big.git"
+  },
   "dependencies": {
     "resource": "0.4.x",
     "resources": "0.4.x"

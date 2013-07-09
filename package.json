@@ -9,8 +9,8 @@
     "url" : "http://github.com/bigcompany/big.git"
   },
   "dependencies": {
-    "resource": "0.4.x",
-    "resources": "0.4.x"
+    "resource": "0.4.2",
+    "resources": "0.4.2"
   },
   "engines": {
     "npm": "~1.2.10"

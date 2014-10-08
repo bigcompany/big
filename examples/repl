@@ -1,5 +1,0 @@
-#!/usr/bin/env node
-
-var resource = require('resource');
-resource.use('repl');
-resource.repl.start();

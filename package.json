@@ -1,6 +1,6 @@
 {
   "name": "big",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "scripts": {
     "start": "node ./bin/big"
   },
@@ -9,12 +9,10 @@
     "url" : "http://github.com/bigcompany/big.git"
   },
   "dependencies": {
-    "resource": "0.4.2",
-    "resources": "0.4.2"
+    "resource": "0.5.x",
+    "minimist": "*"
   },
-  "engines": {
-    "npm": "~1.2.10"
-  },
+  "main": "./lib",
   "bin": {
     "big": "./bin/big"
   },

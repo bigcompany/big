@@ -1,9 +1,0 @@
-#!/usr/bin/env node
-
-var resource = require('resource');
-resource.use('docs');
-
-//
-// Builds README files for all resources
-//
-resource.docs.build();

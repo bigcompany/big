@@ -1,5 +1,0 @@
-{
-  "id": "d46cdeff-1f4a-403f-b3b0-2855246d6cdb",
-  "if": "mesh::uplink",
-  "then": "node::create"
-}

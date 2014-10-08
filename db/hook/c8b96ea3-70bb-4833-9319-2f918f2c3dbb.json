@@ -1,6 +1,0 @@
-{
-  "id": "c8b96ea3-70bb-4833-9319-2f918f2c3dbb",
-  "if": "account::reset",
-  "then": "email::send",
-  "with": { "to": "account.email" }
-}

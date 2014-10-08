@@ -1,5 +1,0 @@
-{
-  "id": "76701e76-ff5d-4463-abbb-7766da798662",
-  "if": "mesh::downlink",
-  "then": "node::create"
-}

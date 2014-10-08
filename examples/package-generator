@@ -1,9 +1,0 @@
-#!/usr/bin/env node
-
-var resource = require('resource');
-resource.use('packager');
-
-//
-// Builds packages for all resources
-//
-resource.packager.build();

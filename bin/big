@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-var resource = require('resource'),
-    resources = require('resources'),
-    logger = resource.logger;
+var minimist = require('minimist');
 
-logger.help('welcome to big');
+var argv = require('minimist')(process.argv.slice(2));
 
-resource.cli.start(function (err, router) {
-  router.route();
-});
+var big = require('../');
+
+big.spawn(argv._[0]);

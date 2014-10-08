@@ -1,79 +1,66 @@
 # Big
 
-Big is a next generation application "framework" which solves the domain problem of building applications for the web.
+## v.0.5.0
 
- - No more writing interface code
- - No more writing API boilerplate
- - No more fishing on `npm` for decent quality modules
- - No more glue
+## Installation
 
-Big allows you to focus on **business logic**.
-
-## Big itself is zero lines long. 
-
-What? How can a framework be zero lines long?
-
-Big actually doesn't do anything. It's more of a [philosopy](http://big.vc/mission) then a framework.
-
-Big provides a collection of curated [resources](http://github.com/bigcompany/resources) defined by the [resource](http://github.com/bigcompany/resource) library. Developers can use any of these resources independently of any "framework".
-
-
-
-## A curated API across npm modules
-
-Big ships with support for [over 50 of the most popular NPM modules](https://github.com/bigcompany/resources). We have hand picked ( and tested ) each of these modules and created a unified API to allow for rapid application development.
-
-### A unified approach 
-
-
- - Unified configuration of npm modules
- - Unified API across npm modules ( `start` / `stop` / `connect` / `disconnect` / etc.. )
- - Unified method signatures
-
-All of the following methods will work. Any missing arguments data is intelligently filled in with defaults.
-
-``` js
-    var message = "hello there";
-
-    twitter.send(message, cb);
-    sms.send(message, cb);
-    email.send(message, cb);
-    irc.send(message, cb);
-    mesh.send(message, cb);
+```bash
+npm install big -g
 ```
 
-## Developer Friendly
+## Starting Built-in Apps
 
-Confused? Lost? Try a `console.log`!
+```bash
+big website
+big load-balancer
+big sink
+big repl
+```
+## Debugging
 
-Big is designed to be highly introspectable. Resources are simple structures that can be easily logged to the console. It's trivial to start iterating through a resource's schema and metaprogramming a new interface.
+To enable debugging in `big` you must set the environment variable `DEBUG`. There are two levels of debugging you'll want to inspect.
+
+```bash
+export DEBUG=big::*,resource::*
+```
+This will enable debugging messages for all `resources` and `big` itself.
+
+## Discovery and Event Emitter Mesh
+
+All big apps automatically create or join a new event emitter mesh when started. Each app is able to communicate to each other through the `big.mesh.emitter` Event Emitter API.
+
+Default discovery settings use `localhost` for all apps. Custom `host` and `port` options can be passed into `big.start`
+
+## Websocket gateway
+
+If `big` is in server mode, a WebSocket gateway will be opened for incoming communication. This can be visited directly in the browser or connected to with the `mesh` resource.
+
+Authorization examples are available [here](https://github.com/bigcompany/resource-mesh/tree/master/example/2_authorization)
+
+# Apps built with `big`
+
+## `website`
+
+Minimal `express` based website application with built-in support for routes, sessions, static file-serving, etc.
+
+Ideal for quickly serving up static content or quickly adding custom http route logic.
+
+## `load-balancer`
+
+Minimal `http-proxy` based HTTP load balancing for multiple websites. Will automatically add `website` apps to it's proxy table apps based on `domain`, `host`, and `port`.
+
+Ideal for routing incoming HTTP traffic to many `websites`. The `website` app will register itself automatically with the `load-balancer.`
+
+## `sink`
+
+Event sink ( dump ) for `big.mesh.emitter`. The `sink` will capture any event emitted on the mesh network and write the event to STDOUT.
+
+Ideal for aggregating all events on the mesh to standard output ( such as a log file ).
+
+## `repl`
+
+Simple interactive repl for communicating with the mesh network.
+
+Ideal for debugging or communicating with nodes via `big.mesh.emitter`
 
 
-## Reflection across multiple interfaces
-
-Big has support to reflect resources across:
-
- - REST
- - Socket
- - Forms
- - CLI
- - Documentation
- - IRC
- - Mesh
-
-[and many more...](http://github.com/bigcompany/resources/)
-
-Customization of the reflection logic is always possible and simple. If a use-case not covered by the reflected interface is required, a simple lower-level API is always available.
-
-## Example Apps
-
-[https://github.com/bigcompany/big/tree/master/examples](https://github.com/bigcompany/big/tree/master/examples)
-
-
-## Resource Development
-
-[https://github.com/bigcompany/resource](https://github.com/bigcompany/resource)
-
-## Featured Resources
-
-[https://github.com/bigcompany/resources](https://github.com/bigcompany/resources)

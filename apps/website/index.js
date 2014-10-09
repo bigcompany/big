@@ -1,6 +1,6 @@
 var big = require('../../index');
 var http = require('resource-http');
-var mesh = require('resource-mesh').mesh;
+var mesh = require('resource-mesh');
 var debug = require('debug')('big::website');
 
 module['exports'] = function website (opts, cb) {

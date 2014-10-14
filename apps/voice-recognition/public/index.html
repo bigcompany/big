@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>big - voice recognition</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  <meta property="og:image" content="https://www.talater.com/annyang/images/icon_speech.png"/>
+  <meta property="og:title" content="annyang! Easily add speech recognition to your site"/>
+  <meta property="og:url" content="https://www.talater.com/annyang/"/>
+  <meta property="og:site_name" content="annyang"/>
+  -->
+  <script>
+    var annyangScript = document.createElement('script');
+    if (/localhost/.exec(window.location)) {
+    } else {
+    }
+    annyangScript.src = "speech.js"
+    
+    document.write(annyangScript.outerHTML)
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="colors.js" type="text/javascript"></script>
+  
+  <script>
+  "use strict";
+
+
+  // first we make sure annyang started succesfully
+  if (annyang) {
+
+    // define the functions our commands will run.
+    var hello = function() {
+      $("#hello").slideDown("slow");
+      scrollTo("#section_hello");
+    };
+
+    var getStarted = function() {
+      window.location.href = 'https://github.com/TalAter/annyang';
+    }
+    
+    var interval;
+
+    // define our commands.
+    // * The key is what you want your users to say say.
+    // * The value is the action to do.
+    //   You can pass a function, a function name (as a string), or write your function as part of the commands object.
+    var commands = {
+
+      'connect': function(item){
+        connect();
+      },
+
+      'alert *item': function(item){
+        alert(item);
+      },
+
+      'hello *message': function(message){
+        //alert(item)
+        mesh.emitter.emit('hello', message);
+      },
+
+      'zalgo': function(item){
+        //alert(item)
+        mesh.emitter.emit('voiceCommand', { event: "text", color: 'zalgo' });
+        
+        interval = setInterval(function(){
+          $('body div').each(function(i, item){  
+            var text = $(item).text() || "";  
+            text = text.split('');
+            var index =  Math.floor(Math.random() * text.length);;
+            if(text[index]){text[index] = text[index].zalgo; 
+              $(item).text(text.join(''));
+            }         
+          });
+        }, 400);
+      },
+
+      'run the trap': function(item){
+        //alert(item)
+        mesh.emitter.emit('voiceCommand', { event: "text", color: 'trap' });
+        $('body div').each(function(i, item){
+          var text = $(item).text() || "";
+          text = text.trap;  
+          $(item).text(text);
+        });
+      },
+      
+      'zalgo NO': function(item){
+        //alert(item)
+        clearInterval(interval);
+      },
+
+      'zalgo STOP': function(item){
+        clearInterval(interval);
+      }
+
+      /*
+      'hello (there)':        hello,
+      'show me *search':      showFlickr,
+      'show :type report':    showTPS,
+      'let\'s get started':   getStarted,
+      */
+    };
+//    console.log(Object.keys(commands))
+
+    for (var c in colors.styles) {
+
+      (function(c){
+        // don't apply BG colors
+        if(c.search('BG') !== -1 || c.search('bg') !== -1) {
+          return;
+        }
+
+        commands['color ' + c] = function(){
+          // changes color of background
+          $('body').css('background-color', c);
+          mesh.emitter.emit('voiceCommand', { event: "color", color: c  });
+        };
+
+        commands['text ' + c] = function(){
+          $('body').css('color', c);
+          mesh.emitter.emit('voiceCommand', { event: "text", color: c  });
+        };
+
+        
+      }(c))
+    }
+
+    // OPTIONAL: activate debug mode for detailed logging in the console
+    annyang.debug();
+
+    // Add voice commands to respond to
+    annyang.addCommands(commands);
+
+    // OPTIONAL: Set a language for speech recognition (defaults to English)
+    annyang.setLanguage('en');
+
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    annyang.start();
+    $(document).ready(function() {
+      // $('#voiceCommands').html(Object.keys(commands, true, 2).join('<br/>'))
+    });
+  } else {
+    $(document).ready(function() {
+      $('#unsupported').fadeIn('fast');
+    });
+  }
+
+  /*
+  var scrollTo = function(identifier, speed) {
+    $('html, body').animate({
+        scrollTop: $(identifier).offset().top
+    }, speed || 1000);
+  }
+  */
+  </script>
+
+  
+  <script src="mesh.js" type="text/javascript"></script>
+
+  <script type="text/javascript" id="theCode">
+
+    var connect = function connect () {
+      mesh.connect({ host: "localhost", port: "8888" }, function (err, _mesh) {
+        if (err) {
+          alert(err)
+          return document.getElementById('meshStatus').innerHTML = "Error in connection.";
+        }
+
+        // $('#meshEvents').html(JSON.stringify(_mesh.eventTable, true, 2));
+
+        $('#voiceCommands').show();
+        
+        setTimeout(function(){
+          mesh.emitter.on('addEvents', function (data){
+            console.log('adding events', data)
+          });
+          mesh.emitter.emit('getEvents', 'f');
+        }, 5000)
+        
+        setInterval(function(){
+          mesh.emitter.emit('hello', 'i am browser');
+        }, 1000);
+        
+        $('.splash').hide();
+        $('#meshStatus').html('Connected')
+//        document.getElementById('meshStatus').innerHTML = "Connected.";
+      });
+    };
+//    connect();
+//    mesh.emitter.emit('voiceCommand', { event: "text", color: 'zalgo' });
+    
+
+
+  </script>
+  
+  <style>
+
+    #content {
+      max-width: 600px;
+      max-height: 400px;
+      width: 600px;
+    }
+
+    #voiceCommands {
+      display: none;
+    }
+
+    #voiceCommands div {
+      padding: 5px;
+      border: solid;
+    }
+
+    #meshStatus {
+      font-size: 32px;
+      color: green;
+    }
+  </style>
+
+  <h3>Make sure to click "Allow" on the above bar ^^^ to enable your microphone</h3>
+  <h2 class="splash">To get started you must say "CONNECT"</h2>
+  <div id="speechActivity"></div>
+  
+  <div id="content">
+  <div id="meshStatus"></div>
+  <div id="meshActivity"></div>
+  <div id="meshEvents"></div>
+  <div id="voiceCommands">
+    <div>
+      <h4>alert *text</h4>
+      <p>
+        creates alert box with *text
+      </P>
+    </div>
+
+    <div>
+      <h4>hello *message </h4>
+      <p>
+        emits the <code>`hello`</code> event on the mesh network with *message as data
+      </P>
+    </div>
+
+    <div>
+      <h4>color :color</h4>
+      <p>
+        changes the background color of this page AND the console running the server
+      </P>
+    </div>
+
+    <div>
+      <h4>text :color </h4>
+      <p>
+        changes the text color of this page AND the console running the server
+      </P>
+    </div>
+    <i>Protip: There are hidden voice commands available if you view the source code of this document.</i>
+  </div>
+  </div>
+  <link rel="stylesheet" href="css/main.min.css" />
+</head>
+<body>
+
+</body>
+</html>

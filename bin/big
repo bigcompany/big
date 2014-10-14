@@ -5,5 +5,4 @@ var minimist = require('minimist');
 var argv = require('minimist')(process.argv.slice(2));
 
 var big = require('../');
-
-big.spawn(argv._[0]);
+big.spawn(argv._[0], argv);

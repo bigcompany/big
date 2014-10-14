@@ -6,33 +6,35 @@ var debug = require('debug')('big::website');
 module['exports'] = function website (opts, cb) {
   opts = opts || {};
   opts.port = opts.port || 8888;
-  opts.site = opts.site || {};
-  opts.site.port = opts.site.port || 9999;
-  opts.site.root = opts.site.root || __dirname + "/public";
-  
-  big.start(opts, function(err, app){
-    // start static http server
-    http.listen({ 
-      port: opts.site.port,
-      root: opts.site.root,
-      view: opts.site.view
-    }, function(err, app) {
-      if (err) {
-        throw err;
-      }
-      // after the http static server has started,
-      // emit an event on the mesh registering it if a loadbalancer is available
-      var addr = app.server.address();
-      debug('started');
-      
-      mesh.emitter.emit('loadbalancer::addSite', {
-        domain: "dev.marak.com",
-        host: addr.address,
-        port: addr.port
-      });
 
-      cb(null, app);
-    });
+  big.start(opts, function(err, server){
+      var site = opts.site || {};
+      site.port = site.port || 9999;
+      site.root = site.root || process.cwd();
+      site.view = site.view || process.cwd() + "/view";
+      site.domain = site.domain || "dev.marak.com";
+
+      var addr = server.port;
+      debug('Started');
+
+      http.listen(site, function(err){
+        if (err) {
+          throw err;
+        }
+
+        mesh.emitter.on('hello', function (data) {
+          console.log('hello', data)
+        });
+
+        // after the http static server has started,
+        // emit an event on the mesh registering it if a loadbalancer is available
+        mesh.emitter.emit('loadbalancer::addSite', {
+          domain: site.domain,
+          host: addr.address,
+          port: addr.port
+        });
+        cb(null, server);
+      });
 
   });
   return big;

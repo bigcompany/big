@@ -63,4 +63,8 @@ Simple interactive repl for communicating with the mesh network.
 
 Ideal for debugging or communicating with nodes via `big.mesh.emitter`
 
+## `voice-recognition`
 
+Browser based Voice Recognition Gateway for communicating with the mesh network.
+
+Ideal for triggering mesh events with voice commands.

@@ -35,7 +35,7 @@ Default discovery settings use `localhost` for all apps. Custom `host` and `port
 
 If `big` is in server mode, a WebSocket gateway will be opened for incoming communication. This can be visited directly in the browser or connected to with the `mesh` resource.
 
-Authorization examples are available [here](https://github.com/bigcompany/resource-mesh/tree/master/example/2_authorization)
+Authorization examples are available [here](https://github.com/bigcompany/resource-mesh/tree/master/examples/2_authorization)
 
 # Apps built with `big`
 

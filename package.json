@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "resource": "0.5.x",
-    "minimist": "*"
+    "minimist": "*",
+    "resource-http": "0.5.x",
+    "resource-mesh": "0.5.x",
+    "debug": "*"
+    
   },
   "main": "./lib",
   "bin": {

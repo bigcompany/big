@@ -14,13 +14,12 @@ module['exports'] = function website (opts, cb) {
       site.view = site.view || process.cwd() + "/view";
       site.domain = site.domain || "dev.marak.com";
 
-      var addr = server.port;
-      debug('Started');
-
-      http.listen(site, function(err){
+      http.listen(site, function(err, httpServer){
         if (err) {
           throw err;
         }
+        debug('Started');
+        var addr = httpServer.server.address();
 
         mesh.emitter.on('hello', function (data) {
           console.log('hello', data)
@@ -33,7 +32,7 @@ module['exports'] = function website (opts, cb) {
           host: addr.address,
           port: addr.port
         });
-        cb(null, server);
+        cb(null, httpServer);
       });
 
   });
